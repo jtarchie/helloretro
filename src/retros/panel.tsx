@@ -21,7 +21,7 @@ function Panel(
 
   return (
     <div class={`${bgPanel} p-4 rounded-lg space-y-4`}>
-      <h2 class="text-6xl text-center drop-shadow-lg">{emoji}</h2>
+      <h2 class="text-6xl text-center drop-shadow-lg -mt-8">{emoji}</h2>
       <form onSubmit={addItem}>
         <input
           type="text"
@@ -31,7 +31,7 @@ function Panel(
           class={`input input-sm w-full p-2 rounded ${bgText} text-white ${bgPlaceholder}`}
         />
       </form>
-      <div class="space-y-2">
+      <div class="space-y-2" role="list">
         {retro.value.items(category).value.map((item) => {
           return <Item retro={retro} item={item} />;
         })}

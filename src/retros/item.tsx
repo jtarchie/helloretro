@@ -8,11 +8,11 @@ function Item({ retro, item }: { retro: Signal<Retro>; item: RecordModel }) {
   const editable = useSignal(false);
 
   return (
-    <>
+    <div role="listitem">
       {editable.value
         ? <EditItem retro={retro} item={item} editable={editable} />
         : <ViewItem retro={retro} item={item} editable={editable} />}
-    </>
+    </div>
   );
 }
 

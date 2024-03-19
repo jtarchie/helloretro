@@ -26,6 +26,30 @@ function App() {
           <Board path="/retros/:id" />
         </Router>
       </div>
+      <footer class="footer p-10 bg-base-300 text-base-content">
+        <nav>
+          <h6 class="footer-title">Company</h6>
+          <a
+            class="link link-hover"
+            href="https://www.termsfeed.com/live/7cac2a09-dea0-4c4e-bda6-401aedd87fd5"
+            target="_blank"
+          >
+            Terms of Service
+          </a>
+          <a
+            class="link link-hover"
+            href="https://www.termsfeed.com/live/4d790e25-f499-427f-a3b2-a661e1db5b75"
+            target="_blank"
+          >
+            Privacy Policy
+          </a>
+        </nav>
+      </footer>
+      <footer class="footer px-10 py-4 border-t bg-base-200 text-base-content border-base-300">
+        <aside class="items-center grid-flow-col">
+          <p>Copyright © 2024 - All right reserved</p>
+        </aside>
+      </footer>
       <dialog id="about_modal" class="modal">
         <div class="modal-box">
           <h3 class="font-bold text-lg">About HelloRetro</h3>

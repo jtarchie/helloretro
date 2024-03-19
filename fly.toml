@@ -1,0 +1,32 @@
+# fly.toml app configuration file generated for helloretro on 2024-03-18T16:31:31-06:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'helloretro'
+primary_region = 'sjc'
+
+[build]
+  dockerfile = "Dockerfile"
+
+[build.args]
+  PB_VERSION="0.22.4"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+   protocol      = "tcp"
+  processes = ['app']
+
+[[vm]]
+  memory = '1gb'
+  cpu_kind = 'shared'
+  cpus = 1
+
+[mounts]
+  source = "pb_data"
+  destination = "/var/pb_data"
+  initial_size = "1gb"

@@ -83,6 +83,12 @@ class Retro {
       "votes+": delta,
     });
   }
+
+  setActiveItem(id: string) {
+    this.client.collection("items").update(id, {
+      "active": new Date().toISOString(),
+    });
+  }
 }
 
 export { Retro };

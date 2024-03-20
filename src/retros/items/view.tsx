@@ -4,21 +4,32 @@ import { RecordModel } from "pocketbase";
 import { SimpleFormat } from "../../simple_format";
 
 function ViewItem(
-  { retro, item, editable }: {
+  { retro, item, state }: {
     retro: Signal<Retro>;
     item: RecordModel;
-    editable: Signal<boolean>;
+    state: Signal<string>;
   },
 ) {
   const upvote = () => retro.value.vote(item.id, 1);
+  const setActive = () => {
+    retro.value.setActiveItem(item.id);
+    state.value = "active";
+  };
 
   return (
-    <div class="bg-white p-2 rounded shadow flex items-center justify-between relative">
+    <div
+      class={`bg-white p-2 rounded shadow flex items-center justify-between relative ${
+        item.completed && "opacity-70 cursor-not-allowed"
+      }`}
+    >
       <div class="flex items-center">
         <button
-          class="flex flex-col items-center"
+          class={`flex flex-col items-center ${
+            item.completed && "btn-disabled"
+          }`}
           onClick={upvote}
           aria-label="Like"
+          disabled={item.completed}
         >
           <span class="text-red-500 mr-2">
             <svg
@@ -33,14 +44,22 @@ function ViewItem(
           </span>
           <span class="text-red-500 mr-2">{item.votes}</span>
         </button>
-        <div class="flow flow-row">
+        <button
+          class={`flow flow-row text-left ${item.completed && "btn-disabled"}`}
+          aria-label="Start Discussing"
+          onClick={() => setActive()}
+          disabled={item.completed}
+        >
           <SimpleFormat classes="text-black" text={item.description} />
-        </div>
+        </button>
       </div>
       <button
-        class="absolute top-2 right-2 text-gray-400 hover:text-gray-600"
-        onClick={() => editable.value = true}
+        class={`absolute top-2 right-2 text-gray-400 hover:text-gray-600 ${
+          item.completed && "btn-disabled"
+        }`}
+        onClick={() => state.value = "edit"}
         aria-label="Edit"
+        disabled={item.completed}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"

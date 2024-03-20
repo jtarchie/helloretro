@@ -3,21 +3,21 @@ import { Retro } from "../../retro";
 import { RecordModel } from "pocketbase";
 
 function EditItem(
-  { retro, item, editable }: {
+  { retro, item, state }: {
     retro: Signal<Retro>;
     item: RecordModel;
-    editable: Signal<boolean>;
+    state: Signal<string>;
   },
 ) {
   const description = signal(item.description);
   const updatedDescription = (event: SubmitEvent) => {
     retro.value.updateDescription(item.id, description.value);
-    editable.value = false;
+    state.value = "view";
     event.preventDefault();
   };
   const deleteItem = () => {
     retro.value.deleteItem(item.id);
-    editable.value = false;
+    state.value = "view";
   };
 
   return (

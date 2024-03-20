@@ -34,7 +34,12 @@ function App() {
       </footer>
       <footer class="footer px-10 py-4 border-t bg-base-200 text-base-content border-base-300">
         <aside class="items-center grid-flow-col">
-          <p>Copyright © 2024 - All right reserved</p>
+          <p>
+            Copyright © 2024 -{" "}
+            <a href="https://jtarchie.com" class="link link-hover" data-native>
+              JT Archie
+            </a>
+          </p>
         </aside>
       </footer>
       <dialog id="about_modal" class="modal">

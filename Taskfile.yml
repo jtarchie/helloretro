@@ -5,7 +5,7 @@ tasks:
     cmds:
     - deno fmt .
     - deno lint src/ pb_hooks/
-  server: pocketbase serve --publicDir dist/
+  server: pocketbase serve --publicDir dist/ --dev
   build: yarn run build --watch
   default:
     cmds:

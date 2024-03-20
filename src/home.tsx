@@ -1,4 +1,4 @@
-function Home({ }: { path?: string }) {
+function Home({}: { path?: string }) {
   return (
     <>
       <div class="flex justify-between items-center bg-gray-800 p-4 text-white">
@@ -25,8 +25,7 @@ function Home({ }: { path?: string }) {
             of the project. The aim is to reflect on what went well, what did
             not, and what could be improved for future cycles.
           </p>
-          <h2 class="text-2xl font-bold mb-4">About the Application</h2>
-          <p class="mb-6">
+          <p class="mb-4">
             HelloRetro is a tool that helps teams run retrospectives more
             effectively. It's designed to foster open communication and
             collaborative discussion, allowing team members to share their

@@ -17,7 +17,7 @@ function Board({ id = "example" }: { path?: string; id?: string }) {
             href={`/retros/${id}/markdown`}
             data-native
           >
-            Download
+            Export
           </a>
           <button
             class="btn btn-ghost btn-sm"

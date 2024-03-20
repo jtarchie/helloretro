@@ -18,5 +18,8 @@ startups.
 
 ```bash
 brew bundle
+
+yarn install
 task -p build server
+yarn test
 ```

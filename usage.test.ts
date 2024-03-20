@@ -27,6 +27,7 @@ describe("create and use a retro", async () => {
       `--dir=${tempDirPath}`, // Use the temporary directory
       `--migrationsDir=./pb_migrations`,
       "--hooksDir=./pb_hooks",
+      "--dev",
       "--http",
       `0.0.0.0:${PORT}`,
     ], {
@@ -79,6 +80,13 @@ describe("create and use a retro", async () => {
     await page.getByLabel("Update the description").click();
     await expect(page.locator("#app")).toContainText(
       "This worked perfectly the way it was expected.",
+    );
+
+    const boardID = page.url().split("/").pop();
+    const markdownUrl = `http://localhost:${PORT}/retros/${boardID}/markdown`;
+    const response = await fetch(markdownUrl);
+    expect(await response.text()).toContain(
+      `## happy\n- This worked perfectly the way it was expected.`,
     );
 
     await page.getByLabel("Edit").click();

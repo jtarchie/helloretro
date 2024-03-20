@@ -56,7 +56,35 @@ describe("create and use a retro", async () => {
 
   test("should work", async () => {
     await page.goto(`http://localhost:${PORT}`);
-    const button = page.getByRole("link", { name: /Start new retro/ });
-    await expect(button).toBeVisible();
-  }, 60_000);
+
+    const link = page.getByRole("link", { name: /Start new retro/ });
+    await expect(link).toBeVisible();
+    await link.click();
+
+    await page.getByPlaceholder("I'm glad that...").click();
+    await page.getByPlaceholder("I'm glad that...").fill(
+      "This worked perfectly.",
+    );
+    await page.getByPlaceholder("I'm glad that...").press("Enter");
+    await expect(page.locator("#app")).toContainText("This worked perfectly");
+
+    await page.getByLabel("Like").click();
+    await expect(page.getByLabel("Like")).toContainText("1");
+
+    await page.getByLabel("Edit").click();
+    await page.getByPlaceholder("Description").click();
+    await page.getByPlaceholder("Description").fill(
+      "This worked perfectly the way it was expected.",
+    );
+    await page.getByLabel("Update the description").click();
+    await expect(page.locator("#app")).toContainText(
+      "This worked perfectly the way it was expected.",
+    );
+
+    await page.getByLabel("Edit").click();
+    await page.getByLabel("Delete the description").click();
+    await expect(page.locator("#app")).not.toContainText(
+      "This worked perfectly the way it was expected.",
+    );
+  }, 10_000);
 });

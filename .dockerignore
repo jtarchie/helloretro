@@ -27,6 +27,9 @@
 # pocketbase
 **/pb_data
 
+Brewfile.lock.json
+*.pdf
+
 # flyctl launch added from node_modules/tailwindcss/stubs/.gitignore
 !node_modules/tailwindcss/stubs/**/*
 fly.toml

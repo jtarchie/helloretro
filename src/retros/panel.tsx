@@ -23,8 +23,10 @@ function Panel(
     <div class={`${bgPanel} p-4 rounded-lg space-y-4`}>
       <h2 class="text-6xl text-center drop-shadow-lg -mt-8">{emoji}</h2>
       <form onSubmit={addItem}>
+        <label class="sr-only" for={category}>{prompt}</label>
         <input
           type="text"
+          id={category}
           value={description}
           onInput={(event) => description.value = event.currentTarget.value}
           placeholder={prompt}

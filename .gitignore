@@ -27,3 +27,4 @@ dist-ssr
 pb_data/
 
 Brewfile.lock.json
+*.pdf

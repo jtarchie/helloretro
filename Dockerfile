@@ -30,4 +30,4 @@ RUN unzip /tmp/pb.zip -d /pb/
 EXPOSE 8080
 
 # start PocketBase
-CMD ["/pb/pocketbase", "serve", "--http=0.0.0.0:8080", "--publicDir=/app/dist/", "--automigrate", "--dir=/var/pb_data", "--migrationsDir=/app/pb_migrations", "--hooksDir=/app/pb_hooks"]
+CMD ["/pb/pocketbase", "serve", "--http=0.0.0.0:8080", "--publicDir=/app/dist/", "--automigrate", "--dir=/var/pb_data", "--migrationsDir=/app/pb_migrations", "--hooksDir=/app/pb_hooks", "--origins=https://helloretro.app"]

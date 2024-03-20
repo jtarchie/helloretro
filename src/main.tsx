@@ -8,19 +8,6 @@ function App() {
   return (
     <>
       <div class="flex flex-col h-screen">
-        <div class="flex justify-between items-center bg-gray-800 p-4 text-white">
-          <h1 class="text-xl">HelloRetro</h1>
-          <div class="flex gap-4">
-            <button
-              class="btn btn-ghost btn-sm"
-              onClick={() =>
-                (document.getElementById("about_modal") as HTMLDialogElement)
-                  .showModal()}
-            >
-              About
-            </button>
-          </div>
-        </div>
         <Router>
           <Home path="/" />
           <Board path="/retros/:id" />

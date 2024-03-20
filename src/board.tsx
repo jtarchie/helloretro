@@ -7,6 +7,28 @@ function Board({ id = "example" }: { path?: string; id?: string }) {
 
   return (
     <>
+      <div class="flex justify-between items-center bg-gray-800 p-4 text-white">
+        <h1 class="text-xl">
+          <a href="/">HelloRetro</a>
+        </h1>
+        <div class="flex gap-4">
+          <a
+            class="btn btn-ghost btn-sm"
+            href={`/retros/${id}/markdown`}
+            data-native
+          >
+            Download
+          </a>
+          <button
+            class="btn btn-ghost btn-sm"
+            onClick={() =>
+              (document.getElementById("about_modal") as HTMLDialogElement)
+                .showModal()}
+          >
+            About
+          </button>
+        </div>
+      </div>
       <div class="flex-grow grid grid-cols-3 gap-4 p-4">
         <Panel
           retro={retro}

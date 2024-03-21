@@ -7,12 +7,10 @@ import { Home } from "./home";
 function App() {
   return (
     <>
-      <div class="flex flex-col h-screen">
-        <Router>
-          <Home path="/" />
-          <Board path="/retros/:id" />
-        </Router>
-      </div>
+      <Router>
+        <Home path="/" />
+        <Board path="/retros/:id" />
+      </Router>
       <footer class="footer p-10 bg-base-300 text-base-content">
         <nav>
           <h6 class="footer-title">Company</h6>

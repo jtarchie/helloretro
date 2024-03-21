@@ -26,7 +26,7 @@ function Board({ id = "example" }: { path?: string; id?: string }) {
           </svg>
         </a>
       </Nav>
-      <div class="flex-grow grid grid-cols-3 gap-4 p-4">
+      <div class="flex-grow grid grid-cols-3 gap-4 p-4 h-full">
         <Panel
           retro={retro}
           category="happy"

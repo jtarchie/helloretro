@@ -1,6 +1,39 @@
 # HelloRetro
 
-[Live deployment](https://helloretro.app)
+Site: https://helloretro.app
+
+## What is a Retro?
+
+The retrospective is a meeting to discuss a situation's successes and failures.
+A retro is meant to be constructive. There's an opportunity to present issues,
+discuss them, and provide steps for action.
+
+_It is not for complaining and commiserating._
+
+There are
+[different formats](https://miro.com/blog/best-retrospective-templates/) for a
+retro. They assist in having patterns for starting, navigating, and concluding a
+discussion.
+
+HelloRetro supports the "Happy, Meh, Sad" / "Mad, Sad, Glad" pattern. It stems
+from answering the questions:
+
+- _Happy_: What went well?
+- _Sad_: What was disappointing?
+- _Mad_: What didn't go well?
+
+## Features
+
+- Easily create a retrospective to share with your team
+- Add/edit retro items
+- Vote on retro items
+- Discussion timer (unopinionated)
+- Realtime updates (using
+  [SSE](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events))
+- Built with accessability in mind
+- Self hosted (no external database required)
+
+## Motivation
 
 This is a retrospective board built in similar style of
 [Refacto](https://github.com/davidje13/Refacto) and

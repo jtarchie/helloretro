@@ -1,22 +1,10 @@
+import { Nav } from "./components/nav";
+
 function Home({}: { path?: string }) {
   return (
     <>
-      <div class="flex justify-between items-center bg-gray-800 p-4 text-white">
-        <h1 class="text-xl">
-          <a href="/">HelloRetro</a>
-        </h1>
-        <div class="flex gap-4">
-          <button
-            class="btn btn-ghost btn-sm"
-            onClick={() =>
-              (document.getElementById("about_modal") as HTMLDialogElement)
-                .showModal()}
-          >
-            About
-          </button>
-        </div>
-      </div>
-      <main class="p-4 flex-grow">
+      <Nav />
+      <main class="container p-4 flex-grow">
         <div class="max-w-4xl mx-auto">
           <h2 class="text-2xl font-bold mb-4">What is a Retrospective?</h2>
           <p class="mb-4">

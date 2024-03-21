@@ -4,7 +4,7 @@ function Home({}: { path?: string }) {
   return (
     <>
       <Nav />
-      <div class="container p-4">
+      <div class="container p-4 mx-auto">
         <div
           class="hero min-h-80"
           style="background-image: url(/screenshot.png);"

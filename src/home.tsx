@@ -22,7 +22,7 @@ function Home({}: { path?: string }) {
                 thoughts and ideas on how to move forward.
               </p>
               <a href="/retros/new" class="btn btn-primary btn-lg" data-native>
-                Start the retro
+                Start your retro
               </a>
             </div>
           </div>

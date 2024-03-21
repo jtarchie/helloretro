@@ -66,7 +66,7 @@ describe("create and use a retro", async () => {
   test("should work", async () => {
     await page.goto(`http://localhost:${PORT}`);
 
-    const link = page.getByRole("link", { name: /Start new retro/ });
+    const link = page.getByRole("link", { name: /Start your retro/ });
     await expect(link).toBeVisible();
     await link.click();
 

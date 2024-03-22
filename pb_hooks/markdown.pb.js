@@ -1,17 +1,5 @@
 /// <reference path="../pb_data/types.d.ts" />
 
-routerAdd("GET", "/retros/new", (context) => {
-  const collection = $app.dao().findCollectionByNameOrId("boards");
-
-  const record = new Record(collection, {
-    archived: false,
-  });
-
-  $app.dao().saveRecord(record);
-
-  return context.redirect(302, `/retros/${record.get("id")}`);
-});
-
 routerAdd("GET", "/retros/:id/markdown", (context) => {
   const id = context.pathParam("id");
 
@@ -51,24 +39,3 @@ routerAdd("GET", "/retros/:id/markdown", (context) => {
 
   return context.string(200, markdownText);
 });
-
-onModelBeforeUpdate((event) => {
-  const item = event.model;
-
-  if (!item.get("completed") && item.get("active") != "") {
-    item.set("active", new Date().toISOString());
-
-    const items = $app.dao().findRecordsByFilter(
-      "items",
-      `board_id = '${
-        item.get("board_id")
-      }' && id != '${item.getId()}' && active != '' && completed = false`,
-    );
-
-    // Iterate over the fetched items and update them
-    items.forEach((item) => {
-      item.set("completed", true);
-      $app.dao().saveRecord(item);
-    });
-  }
-}, "items");

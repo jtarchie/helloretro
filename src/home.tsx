@@ -13,7 +13,7 @@ function Home({}: { path?: string }) {
           <div class="hero-content text-center text-neutral-content">
             <div class="max-w-lg">
               <h1 class="mb-5 text-5xl font-bold">
-                Reflect on your team's work
+                Reflect on your work
               </h1>
               <p class="mb-5">
                 HelloRetro is a tool that helps teams run retrospectives more

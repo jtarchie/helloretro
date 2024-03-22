@@ -7,7 +7,7 @@ COPY yarn.lock .
 RUN yarn install
 
 COPY . .
-RUN yarn run build
+RUN yarn run build --base=https://helloretro.app
 
 FROM alpine:latest
 

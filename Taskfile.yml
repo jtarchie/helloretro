@@ -6,7 +6,7 @@ tasks:
     - deno fmt .
     - deno lint src/ pb_hooks/
   server: pocketbase serve --publicDir dist/ --dev
-  build: yarn run build --watch
+  build: yarn run build --watch --base=http://127.0.0.1:8090
   default:
     cmds:
     - task: fmt

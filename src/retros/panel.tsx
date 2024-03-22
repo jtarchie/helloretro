@@ -21,7 +21,13 @@ function Panel(
 
   return (
     <div class={`${bgPanel} p-4 rounded-lg space-y-4`}>
-      <h2 class="text-6xl text-center drop-shadow-lg -mt-8">{emoji}</h2>
+      <div
+        class="w-full text-6xl text-center drop-shadow-lg -mt-8 tooltip"
+        aria-label={`Emoji representing ${category}`}
+        data-tip={`Emoji representing ${category}`}
+      >
+        {emoji}
+      </div>
       <form onSubmit={addItem}>
         <label class="sr-only" for={category}>{prompt}</label>
         <input

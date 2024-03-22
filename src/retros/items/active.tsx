@@ -30,8 +30,10 @@ function ActiveItem({ item }: { item: RecordModel }) {
   }, [item.active]);
 
   return (
-    <div class="bg-white p-2 rounded shadow flex items-center justify-between relative">
-      <SimpleFormat classes="text-black" text={item.description} />
+    <div class="bg-white p-2 rounded shadow-xl flex items-center justify-between relative transform scale-110 -rotate-1 transition duration-300 ease-in">
+      <div>
+        <SimpleFormat classes="text-black" text={item.description} />
+      </div>
       <div class="badge badge-primary badge-lg">{timeDisplay}</div>
     </div>
   );

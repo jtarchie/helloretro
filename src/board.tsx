@@ -26,31 +26,29 @@ function Board({ id = "example" }: { path?: string; id?: string }) {
           </svg>
         </a>
       </Nav>
-      <div class="flex-grow flex overflow-hidden">
-        <div class="flex-grow flex flex-col">
-          <div class="flex-grow grid grid-cols-3 gap-4 p-4 h-full overflow-auto">
-            <Panel
-              retro={retro}
-              category="happy"
-              emoji="😃"
-              prompt="I'm glad that..."
-              bg={["bg-teal-500", "bg-teal-400", "placeholder-teal-200"]}
-            />
-            <Panel
-              retro={retro}
-              category="meh"
-              emoji="🤨"
-              prompt="I'm wondering about.."
-              bg={["bg-yellow-500", "bg-yellow-400", "placeholder-yellow-200"]}
-            />
-            <Panel
-              retro={retro}
-              category="sad"
-              emoji="😢"
-              prompt="It wasn't so great that..."
-              bg={["bg-red-500", "bg-red-400", "placeholder-red-200"]}
-            />
-          </div>
+      <div class="flex-grow">
+        <div class="flex-grow grid grid-cols-1 md:grid-cols-3 gap-4 p-4 md:h-full">
+          <Panel
+            retro={retro}
+            category="happy"
+            emoji="😃"
+            prompt="I'm glad that..."
+            bg={["bg-teal-500", "bg-teal-400", "placeholder-teal-200"]}
+          />
+          <Panel
+            retro={retro}
+            category="meh"
+            emoji="🤨"
+            prompt="I'm wondering about.."
+            bg={["bg-yellow-500", "bg-yellow-400", "placeholder-yellow-200"]}
+          />
+          <Panel
+            retro={retro}
+            category="sad"
+            emoji="😢"
+            prompt="It wasn't so great that..."
+            bg={["bg-red-500", "bg-red-400", "placeholder-red-200"]}
+          />
         </div>
       </div>
     </>

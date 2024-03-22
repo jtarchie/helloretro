@@ -52,6 +52,9 @@ function App() {
           <h3 class="text-2xl font-semibold mb-4">How to Use</h3>
           <ul class="list-disc pl-8 mb-4">
             <li>
+              Start a new retro and share the link with team members.
+            </li>
+            <li>
               Start by selecting the mood that best describes your retrospective
               point.
             </li>

@@ -15,14 +15,6 @@ function Nav({ children }: { children?: JSX.Element }) {
       </div>
       <div class="flex-none gap-4">
         {children}
-        <button
-          class="btn btn-ghost btn-sm"
-          onClick={() =>
-            (document.getElementById("about_modal") as HTMLDialogElement)
-              .showModal()}
-        >
-          About
-        </button>
       </div>
     </div>
   );

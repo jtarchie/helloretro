@@ -49,7 +49,15 @@ function Board({ id = "example" }: { path?: string; id?: string }) {
               <path d="M10.75 2.75a.75.75 0 0 0-1.5 0v8.614L6.295 8.235a.75.75 0 1 0-1.09 1.03l4.25 4.5a.75.75 0 0 0 1.09 0l4.25-4.5a.75.75 0 0 0-1.09-1.03l-2.955 3.129V2.75Z" />
               <path d="M3.5 12.75a.75.75 0 0 0-1.5 0v2.5A2.75 2.75 0 0 0 4.75 18h10.5A2.75 2.75 0 0 0 18 15.25v-2.5a.75.75 0 0 0-1.5 0v2.5c0 .69-.56 1.25-1.25 1.25H4.75c-.69 0-1.25-.56-1.25-1.25v-2.5Z" />
             </svg>
-          </a>
+          </a>{" "}
+          <button
+            class="btn btn-ghost btn-sm"
+            onClick={() =>
+              (document.getElementById("help_modal") as HTMLDialogElement)
+                .showModal()}
+          >
+            Help
+          </button>
         </>
       </Nav>
       <div class="flex-grow">
@@ -77,6 +85,48 @@ function Board({ id = "example" }: { path?: string; id?: string }) {
           />
         </div>
       </div>
+      <dialog id="help_modal" class="modal">
+        <div class="modal-box">
+          <h3 class="font-bold text-lg">About HelloRetro</h3>
+          <p class="mb-4">
+            HelloRetro is a retrospective tool designed to facilitate agile
+            retrospectives. This application allows teams to reflect on their
+            recent work cycle, discuss what went well, and identify areas for
+            improvement.
+          </p>
+          <h3 class="text-2xl font-semibold mb-4">How to Use</h3>
+          <ul class="list-disc pl-8 mb-4">
+            <li>
+              Start a new retro and share the link with team members.
+            </li>
+            <li>
+              Start by selecting the mood that best describes your retrospective
+              point.
+            </li>
+            <li>
+              Enter your thoughts into the text box provided under each mood
+              section.
+            </li>
+            <li>
+              You can submit your point by clicking the checkmark icon or delete
+              it using the trash can icon.
+            </li>
+            <li>
+              Vote on points by clicking the heart icon to show agreement or
+              acknowledgment.
+            </li>
+            <li>
+              The number next to the heart indicates how many votes a point has
+              received.
+            </li>
+          </ul>
+          <div class="modal-action">
+            <form method="dialog">
+              <button class="btn">Close</button>
+            </form>
+          </div>
+        </div>
+      </dialog>
     </>
   );
 }

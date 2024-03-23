@@ -89,6 +89,18 @@ class Retro {
       "active": new Date().toISOString(),
     });
   }
+
+  setInactiveItem(id: string) {
+    this.client.collection("items").update(id, {
+      "active": "",
+    });
+  }
+
+  setCompletedItem(id: string) {
+    this.client.collection("items").update(id, {
+      "completed": true,
+    });
+  }
 }
 
 export { Retro };

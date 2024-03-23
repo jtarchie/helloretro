@@ -6,13 +6,11 @@ import { ViewItem } from "./items/view";
 import { ActiveItem } from "./items/active";
 
 function Item({ retro, item }: { retro: Signal<Retro>; item: RecordModel }) {
-  const state = useSignal("view");
-
-  if (!item.completed && item.active) {
-    state.value = "active";
-  } else if (item.completed) {
-    state.value = "view";
+  let defaultState = "view";
+  if (!item.completed && item.active != "") {
+    defaultState = "active";
   }
+  const state = useSignal(defaultState);
 
   switch (state.value) {
     case "edit":
@@ -24,7 +22,7 @@ function Item({ retro, item }: { retro: Signal<Retro>; item: RecordModel }) {
     case "active":
       return (
         <div role="listitem">
-          <ActiveItem item={item} />
+          <ActiveItem retro={retro} item={item} state={state} />
         </div>
       );
     default:

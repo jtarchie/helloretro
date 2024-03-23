@@ -41,7 +41,7 @@ function Panel(
       </form>
       <div class="space-y-2" role="list">
         {retro.value.items(category).value.map((item) => {
-          return <Item retro={retro} item={item} />;
+          return <Item key={item.id} retro={retro} item={item} />;
         })}
       </div>
     </div>

@@ -19,7 +19,6 @@ COPY --from=build /app/pb_migrations /app/pb_migrations
 ARG PB_VERSION=0.22.4
 
 RUN apk add --no-cache \
-    unzip \
     ca-certificates \
     sqlite \
     openssh

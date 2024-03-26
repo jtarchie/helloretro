@@ -63,6 +63,14 @@ describe("create and use a retro", async () => {
     await expect(page.locator("#app")).toContainText(description);
   };
 
+  const getMarkdown = async () => {
+    const boardID = page.url().split("/").pop();
+    const markdownUrl = `http://localhost:${PORT}/retros/${boardID}/markdown`;
+    const response = await fetch(markdownUrl);
+
+    return await response.text();
+  }
+
   test("should work", async () => {
     await page.goto(`http://localhost:${PORT}`);
 
@@ -85,11 +93,9 @@ describe("create and use a retro", async () => {
       "This worked perfectly the way it was expected.",
     );
 
-    const boardID = page.url().split("/").pop();
-    const markdownUrl = `http://localhost:${PORT}/retros/${boardID}/markdown`;
-    const response = await fetch(markdownUrl);
-    expect(await response.text()).toContain(
-      `## happy\n- This worked perfectly the way it was expected.`,
+    let markdownText = await getMarkdown()
+    expect(markdownText).toContain(
+      `## happy\n- [ ] This worked perfectly the way it was expected.`,
     );
 
     await page.getByLabel("Edit").click();
@@ -101,5 +107,11 @@ describe("create and use a retro", async () => {
     await addItem("Start this item.");
     await page.getByLabel("Start Discussing").click();
     await expect(page.locator("#app")).toContainText(/00:\d\d/);
+
+    await page.getByLabel("Complete").click();
+    markdownText = await getMarkdown()
+    expect(markdownText).toContain(
+      `- [x] Start this item.`,
+    );
   }, 5_000);
 });

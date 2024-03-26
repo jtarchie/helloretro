@@ -22,7 +22,7 @@ routerAdd("GET", "/retros/:id/markdown", (context) => {
   Object.keys(itemsByCategory).forEach((category) => {
     markdown.push(`\n## ${category}`);
     itemsByCategory[category].forEach((item) => {
-      markdown.push(`- ${item.get("description")}`);
+      markdown.push(`- [${item.get("completed") ? "x" : " "}] ${item.get("description").replace(/(\r\n|\n|\r)/gm," ")}`);
     });
   });
 

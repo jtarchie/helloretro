@@ -23,7 +23,10 @@ class Retro {
       // load the initial list
       this.client.collection("items").getFullList({
         sort: "-votes",
-        filter: `board_id="${this.id}" && category="${category}"`,
+        filter: this.client.filter(
+          "board_id={:board_id} && category={:category}",
+          {board_id: this.id, category: category}
+        )
       }).then((results) => {
         items.value = results;
       });
@@ -52,7 +55,10 @@ class Retro {
           );
         }
       }, {
-        filter: `board_id = "${this.id}" && category = "${category}"`,
+        filter: this.client.filter(
+          "board_id={:board_id} && category={:category}",
+          {board_id: this.id, category: category}
+        )
       });
     }
 

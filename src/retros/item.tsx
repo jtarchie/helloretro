@@ -4,13 +4,14 @@ import { RecordModel } from "pocketbase";
 import { EditItem } from "./items/edit";
 import { ViewItem } from "./items/view";
 import { ActiveItem } from "./items/active";
+import { ItemStatus } from "./items/status";
 
 function Item({ retro, item }: { retro: Signal<Retro>; item: RecordModel }) {
-  let defaultState = "view";
+  let defaultState: ItemStatus = "view";
   if (!item.completed && item.active != "") {
     defaultState = "active";
   }
-  const state = useSignal(defaultState);
+  const state = useSignal<ItemStatus>(defaultState);
 
   switch (state.value) {
     case "edit":

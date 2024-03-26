@@ -1,12 +1,13 @@
 import { Signal, signal } from "@preact/signals";
 import { Retro } from "../../retro";
 import { RecordModel } from "pocketbase";
+import { ItemStatus } from "./status";
 
 function EditItem(
   { retro, item, state }: {
     retro: Signal<Retro>;
     item: RecordModel;
-    state: Signal<string>;
+    state: Signal<ItemStatus>;
   },
 ) {
   const description = signal(item.description);

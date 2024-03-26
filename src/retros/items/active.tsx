@@ -3,12 +3,13 @@ import { SimpleFormat } from "../../simple_format";
 import { useEffect, useState } from "preact/hooks";
 import { Signal } from "@preact/signals";
 import { Retro } from "../../retro";
+import { ItemStatus } from "./status";
 
 function ActiveItem(
   { item, retro, state }: {
     item: RecordModel;
     retro: Signal<Retro>;
-    state: Signal<string>;
+    state: Signal<ItemStatus>;
   },
 ) {
   const [timeDisplay, setTimeDisplay] = useState("");

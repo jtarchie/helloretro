@@ -25,8 +25,8 @@ class Retro {
         sort: "-votes",
         filter: this.client.filter(
           "board_id={:board_id} && category={:category}",
-          {board_id: this.id, category: category}
-        )
+          { board_id: this.id, category: category },
+        ),
       }).then((results) => {
         items.value = results;
       });
@@ -57,8 +57,8 @@ class Retro {
       }, {
         filter: this.client.filter(
           "board_id={:board_id} && category={:category}",
-          {board_id: this.id, category: category}
-        )
+          { board_id: this.id, category: category },
+        ),
       });
     }
 

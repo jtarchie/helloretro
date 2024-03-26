@@ -2,12 +2,13 @@ import { Signal } from "@preact/signals";
 import { Retro } from "../../retro";
 import { RecordModel } from "pocketbase";
 import { SimpleFormat } from "../../simple_format";
+import { ItemStatus } from "./status";
 
 function ViewItem(
   { retro, item, state }: {
     retro: Signal<Retro>;
     item: RecordModel;
-    state: Signal<string>;
+    state: Signal<ItemStatus>;
   },
 ) {
   const upvote = () => retro.value.vote(item.id, 1);

@@ -5,6 +5,32 @@ import { useSignal } from "@preact/signals";
 import { Tab } from "./retros/tab";
 
 function Board({ id = "example" }: { path?: string; id?: string }) {
+  const columns = [
+    {
+      type: "happy",
+      emoji: "😃",
+      prompt: "I'm glad that...",
+      colors: ["bg-teal-500", "bg-teal-400", "placeholder-teal-200"],
+    },
+    {
+      type: "meh",
+      emoji: "🤨",
+      prompt: "I'm wondering about..",
+      colors: ["bg-yellow-500", "bg-yellow-400", "placeholder-yellow-200"],
+    },
+    {
+      type: "sad",
+      emoji: "😢",
+      prompt: "It wasn't so great that...",
+      colors: ["bg-red-500", "bg-red-400", "placeholder-red-200"],
+    },
+    {
+      type: "action items",
+      emoji: "📝",
+      prompt: "This is our next step...",
+      colors: ["bg-purple-500", "bg-purple-400", "placeholder-purple-200"],
+    },
+  ];
   const retro = useSignal(new Retro(id));
   const checked = useSignal("happy");
 
@@ -51,7 +77,7 @@ function Board({ id = "example" }: { path?: string; id?: string }) {
               <path d="M10.75 2.75a.75.75 0 0 0-1.5 0v8.614L6.295 8.235a.75.75 0 1 0-1.09 1.03l4.25 4.5a.75.75 0 0 0 1.09 0l4.25-4.5a.75.75 0 0 0-1.09-1.03l-2.955 3.129V2.75Z" />
               <path d="M3.5 12.75a.75.75 0 0 0-1.5 0v2.5A2.75 2.75 0 0 0 4.75 18h10.5A2.75 2.75 0 0 0 18 15.25v-2.5a.75.75 0 0 0-1.5 0v2.5c0 .69-.56 1.25-1.25 1.25H4.75c-.69 0-1.25-.56-1.25-1.25v-2.5Z" />
             </svg>
-          </a>{" "}
+          </a>
           <button
             class="btn btn-ghost btn-sm"
             onClick={() =>
@@ -64,69 +90,32 @@ function Board({ id = "example" }: { path?: string; id?: string }) {
       </Nav>
       <div class="flex-grow hidden md:block">
         <div class="flex-grow grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-4 p-4 md:h-full">
-          <Panel
-            retro={retro}
-            category="happy"
-            emoji="😃"
-            prompt="I'm glad that..."
-            bg={["bg-teal-500", "bg-teal-400", "placeholder-teal-200"]}
-          />
-          <Panel
-            retro={retro}
-            category="meh"
-            emoji="🤨"
-            prompt="I'm wondering about.."
-            bg={["bg-yellow-500", "bg-yellow-400", "placeholder-yellow-200"]}
-          />
-          <Panel
-            retro={retro}
-            category="sad"
-            emoji="😢"
-            prompt="It wasn't so great that..."
-            bg={["bg-red-500", "bg-red-400", "placeholder-red-200"]}
-          />
-          <Panel
-            retro={retro}
-            category="action items"
-            emoji="📝"
-            prompt="This is our next step..."
-            bg={["bg-purple-500", "bg-purple-400", "placeholder-purple-200"]}
-          />
+          {columns.map((column) => {
+            return (
+              <Panel
+                bg={column.colors}
+                category={column.type}
+                emoji={column.emoji}
+                prompt={column.prompt}
+                retro={retro}
+              />
+            );
+          })}
         </div>
       </div>
       <div role="tablist" class="tabs tabs-bordered md:hidden">
-        <Tab
-          retro={retro}
-          category="happy"
-          emoji="😃"
-          prompt="I'm glad that..."
-          checked={checked}
-          bg={["bg-teal-500", "bg-teal-400", "placeholder-teal-200"]}
-        />
-        <Tab
-          retro={retro}
-          category="meh"
-          emoji="🤨"
-          prompt="I'm wondering about.."
-          checked={checked}
-          bg={["bg-yellow-500", "bg-yellow-400", "placeholder-yellow-200"]}
-        />
-        <Tab
-          retro={retro}
-          category="sad"
-          emoji="😢"
-          prompt="It wasn't so great that..."
-          checked={checked}
-          bg={["bg-red-500", "bg-red-400", "placeholder-red-200"]}
-        />
-        <Tab
-          retro={retro}
-          category="action items"
-          emoji="📝"
-          prompt="This is our next step..."
-          checked={checked}
-          bg={["bg-purple-500", "bg-purple-400", "placeholder-purple-200"]}
-        />
+        {columns.map((column) => {
+          return (
+            <Tab
+              bg={column.colors}
+              category={column.type}
+              checked={checked}
+              emoji={column.emoji}
+              prompt={column.prompt}
+              retro={retro}
+            />
+          );
+        })}
       </div>
       <dialog id="help_modal" class="modal">
         <div class="modal-box">

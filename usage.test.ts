@@ -69,7 +69,7 @@ describe("create and use a retro", async () => {
     const response = await fetch(markdownUrl);
 
     return await response.text();
-  }
+  };
 
   test("should work", async () => {
     await page.goto(`http://localhost:${PORT}`);

@@ -2,9 +2,11 @@ import { Nav } from "./components/nav";
 import { Retro } from "./retro";
 import { Panel } from "./retros/panel";
 import { useSignal } from "@preact/signals";
+import { Tab } from "./retros/tab";
 
 function Board({ id = "example" }: { path?: string; id?: string }) {
   const retro = useSignal(new Retro(id));
+  const checked = useSignal("happy");
 
   const onShare = () => {
     navigator.clipboard.writeText(`${import.meta.env.BASE_URL}/retros/${id}`);
@@ -60,8 +62,8 @@ function Board({ id = "example" }: { path?: string; id?: string }) {
           </button>
         </>
       </Nav>
-      <div class="flex-grow">
-        <div class="flex-grow grid grid-cols-1 md:grid-cols-3 gap-4 p-4 md:h-full">
+      <div class="flex-grow hidden md:block">
+        <div class="flex-grow grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-4 p-4 md:h-full">
           <Panel
             retro={retro}
             category="happy"
@@ -83,7 +85,48 @@ function Board({ id = "example" }: { path?: string; id?: string }) {
             prompt="It wasn't so great that..."
             bg={["bg-red-500", "bg-red-400", "placeholder-red-200"]}
           />
+          <Panel
+            retro={retro}
+            category="action items"
+            emoji="📝"
+            prompt="This is our next step..."
+            bg={["bg-purple-500", "bg-purple-400", "placeholder-purple-200"]}
+          />
         </div>
+      </div>
+      <div role="tablist" class="tabs tabs-bordered md:hidden">
+        <Tab
+          retro={retro}
+          category="happy"
+          emoji="😃"
+          prompt="I'm glad that..."
+          checked={checked}
+          bg={["bg-teal-500", "bg-teal-400", "placeholder-teal-200"]}
+        />
+        <Tab
+          retro={retro}
+          category="meh"
+          emoji="🤨"
+          prompt="I'm wondering about.."
+          checked={checked}
+          bg={["bg-yellow-500", "bg-yellow-400", "placeholder-yellow-200"]}
+        />
+        <Tab
+          retro={retro}
+          category="sad"
+          emoji="😢"
+          prompt="It wasn't so great that..."
+          checked={checked}
+          bg={["bg-red-500", "bg-red-400", "placeholder-red-200"]}
+        />
+        <Tab
+          retro={retro}
+          category="action items"
+          emoji="📝"
+          prompt="This is our next step..."
+          checked={checked}
+          bg={["bg-purple-500", "bg-purple-400", "placeholder-purple-200"]}
+        />
       </div>
       <dialog id="help_modal" class="modal">
         <div class="modal-box">

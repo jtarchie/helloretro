@@ -3,6 +3,7 @@ import { Retro } from "./retro";
 import { Panel } from "./retros/panel";
 import { useSignal } from "@preact/signals";
 import { Tab } from "./retros/tab";
+import MediaQuery from "react-responsive";
 
 function Board({ id = "example" }: { path?: string; id?: string }) {
   const columns = [
@@ -43,7 +44,7 @@ function Board({ id = "example" }: { path?: string; id?: string }) {
       <Nav>
         <>
           <button
-            class="btn btn-ghost btn-sm tooltip tooltip-bottom"
+            class="btn btn-ghost btn-sm tooltip tooltip-bottom hidden sm:inline-block"
             data-tip="Copy Link"
             aria-label="Copy Link"
             onClick={onShare}
@@ -62,7 +63,7 @@ function Board({ id = "example" }: { path?: string; id?: string }) {
             </svg>
           </button>
           <a
-            class="btn btn-ghost btn-sm tooltip tooltip-bottom"
+            class="btn btn-ghost btn-sm tooltip tooltip-bottom hidden sm:inline-block"
             href={`/retros/${id}/markdown`}
             aria-label="Export to Markdown"
             data-tip="Export to Markdown"
@@ -88,13 +89,31 @@ function Board({ id = "example" }: { path?: string; id?: string }) {
           </button>
         </>
       </Nav>
-      <div class="flex-grow hidden md:block">
-        <div class="flex-grow grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-4 p-4 md:h-full">
+      <MediaQuery minWidth={768}>
+        <div class="flex-grow hidden md:block">
+          <div class="flex-grow grid grid-cols-4 gap-4 p-4 md:h-full">
+            {columns.map((column) => {
+              return (
+                <Panel
+                  bg={column.colors}
+                  category={column.type}
+                  emoji={column.emoji}
+                  prompt={column.prompt}
+                  retro={retro}
+                />
+              );
+            })}
+          </div>
+        </div>
+      </MediaQuery>
+      <MediaQuery maxWidth={768}>
+        <div role="tablist" class="tabs tabs-bordered md:hidden">
           {columns.map((column) => {
             return (
-              <Panel
+              <Tab
                 bg={column.colors}
                 category={column.type}
+                checked={checked}
                 emoji={column.emoji}
                 prompt={column.prompt}
                 retro={retro}
@@ -102,21 +121,7 @@ function Board({ id = "example" }: { path?: string; id?: string }) {
             );
           })}
         </div>
-      </div>
-      <div role="tablist" class="tabs tabs-bordered md:hidden">
-        {columns.map((column) => {
-          return (
-            <Tab
-              bg={column.colors}
-              category={column.type}
-              checked={checked}
-              emoji={column.emoji}
-              prompt={column.prompt}
-              retro={retro}
-            />
-          );
-        })}
-      </div>
+      </MediaQuery>
       <dialog id="help_modal" class="modal">
         <div class="modal-box">
           <h3 class="font-bold text-lg">About HelloRetro</h3>

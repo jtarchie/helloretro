@@ -93,7 +93,7 @@ describe("create and use a retro", async () => {
       "This worked perfectly the way it was expected.",
     );
 
-    let markdownText = await getMarkdown()
+    let markdownText = await getMarkdown();
     expect(markdownText).toContain(
       `## happy\n- [ ] This worked perfectly the way it was expected.`,
     );
@@ -109,7 +109,7 @@ describe("create and use a retro", async () => {
     await expect(page.locator("#app")).toContainText(/00:\d\d/);
 
     await page.getByLabel("Complete").click();
-    markdownText = await getMarkdown()
+    markdownText = await getMarkdown();
     expect(markdownText).toContain(
       `- [x] Start this item.`,
     );

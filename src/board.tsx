@@ -107,7 +107,7 @@ function Board({ id = "example" }: { path?: string; id?: string }) {
         </div>
       </MediaQuery>
       <MediaQuery maxWidth={768}>
-        <div role="tablist" class="tabs tabs-bordered md:hidden">
+        <div role="tablist" class="tabs tabs-bordered md:hidden grid grid-cols-1">
           {columns.map((column) => {
             return (
               <Tab

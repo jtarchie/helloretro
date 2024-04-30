@@ -7,26 +7,33 @@ app = 'helloretro'
 primary_region = 'sjc'
 
 [build]
-  dockerfile = "Dockerfile"
+dockerfile = "Dockerfile"
 
 [build.args]
-  PB_VERSION="0.22.8"
+PB_VERSION = "0.22.10"
 
 [http_service]
-  internal_port = 8080
-  force_https = true
-  auto_stop_machines = true
-  auto_start_machines = true
-  min_machines_running = 0
-   protocol      = "tcp"
-  processes = ['app']
+internal_port = 8080
+force_https = true
+auto_stop_machines = true
+auto_start_machines = true
+min_machines_running = 0
+protocol = "tcp"
+processes = ['app']
+
+[[http_service.checks]]
+  grace_period = "10s"
+  interval = "30s"
+  method = "GET"
+  timeout = "5s"
+  path = "/api/health"
 
 [[vm]]
-  memory = '1gb'
-  cpu_kind = 'shared'
-  cpus = 1
+memory = '1gb'
+cpu_kind = 'shared'
+cpus = 1
 
 [mounts]
-  source = "pb_data"
-  destination = "/var/pb_data"
-  initial_size = "1gb"
+source = "pb_data"
+destination = "/var/pb_data"
+initial_size = "1gb"

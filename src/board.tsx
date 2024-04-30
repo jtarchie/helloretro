@@ -125,7 +125,7 @@ function Board({ id = "example" }: { path?: string; id?: string }) {
           })}
         </div>
       </MediaQuery>
-      <dialog id="help_modal" class="modal">
+      <dialog id="help_modal" class="modal sm:modal-middle">
         <div class="modal-box">
           <h3 class="font-bold text-lg">About HelloRetro</h3>
           <p class="mb-4">

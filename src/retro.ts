@@ -105,6 +105,10 @@ class Retro {
       "completed": true,
     });
   }
+
+  async delete() {
+    return this.client.collection("boards").delete(this.id);
+  }
 }
 
 export { Retro };

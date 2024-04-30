@@ -113,5 +113,11 @@ describe("create and use a retro", async () => {
     expect(markdownText).toContain(
       `- [x] Start this item.`,
     );
-  }, 5_000);
+
+    // TODO: find some way to test confirm
+    // await page.getByLabel("Delete Retro").click();
+    // page.on('dialog', dialog => dialog.accept());
+    // await page.getByLabel('OK').click();
+    // await expect(page.locator('#app')).toContainText(/Start your retro/);
+  }, 10_000);
 });

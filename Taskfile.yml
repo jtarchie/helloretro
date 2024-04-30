@@ -10,3 +10,4 @@ tasks:
   default:
     cmds:
     - task: fmt
+    - yarn test

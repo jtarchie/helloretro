@@ -22,7 +22,7 @@ class Retro {
 
       // load the initial list
       this.client.collection("items").getFullList({
-        sort: "-votes",
+        sort: "created",
         filter: this.client.filter(
           "board_id={:board_id} && category={:category}",
           { board_id: this.id, category: category },
@@ -34,9 +34,7 @@ class Retro {
       // subscribe to the latest items
       this.client.collection("items").subscribe("*", (event) => {
         if (event.action == "create") {
-          items.value = [...items.value, event.record].sort((a, b) =>
-            b.votes - a.votes
-          );
+          items.value = [...items.value, event.record];
         }
 
         if (event.action == "update") {
@@ -46,7 +44,7 @@ class Retro {
             } else {
               return item;
             }
-          }).sort((a, b) => b.votes - a.votes);
+          });
         }
 
         if (event.action == "delete") {

@@ -107,7 +107,7 @@ class Retro {
   }
 
   async delete() {
-    return this.client.collection("boards").delete(this.id);
+    return await this.client.collection("boards").delete(this.id);
   }
 }
 

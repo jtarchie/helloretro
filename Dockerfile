@@ -16,7 +16,7 @@ COPY --from=build /app/dist /app/dist
 COPY --from=build /app/pb_hooks /app/pb_hooks
 COPY --from=build /app/pb_migrations /app/pb_migrations
 
-ARG PB_VERSION=0.22.4
+ARG PB_VERSION=0.22.19
 
 RUN apk add --no-cache \
     ca-certificates \

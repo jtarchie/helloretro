@@ -1,4 +1,4 @@
-import { JSX } from "preact/compat";
+import type { JSX } from "preact/compat";
 
 function Nav({ children }: { children?: JSX.Element }) {
   return (

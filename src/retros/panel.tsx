@@ -1,5 +1,5 @@
-import { computed, Signal, useSignal } from "@preact/signals";
-import { Retro } from "../retro";
+import { computed, type Signal, useSignal } from "@preact/signals";
+import type { Retro } from "../retro";
 import { Item } from "./item";
 
 function Panel(

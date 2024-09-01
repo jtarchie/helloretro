@@ -70,6 +70,7 @@ function Board({ id = "example" }: { path?: string; id?: string }) {
                 class="w-5 h-5 text-red-500 mr-2"
                 aria-hidden="true"
               >
+                <title>Multiple Users</title>
                 <path d="m9.653 16.915-.005-.003-.019-.01a20.759 20.759 0 0 1-1.162-.682 22.045 22.045 0 0 1-2.582-1.9C4.045 12.733 2 10.352 2 7.5a4.5 4.5 0 0 1 8-2.828A4.5 4.5 0 0 1 18 7.5c0 2.852-2.044 5.233-3.885 6.82a22.049 22.049 0 0 1-3.744 2.582l-.019.01-.005.003h-.002a.739.739 0 0 1-.69.001l-.002-.001Z" />
               </svg>
             </div>
@@ -82,6 +83,7 @@ function Board({ id = "example" }: { path?: string; id?: string }) {
                 stroke="currentColor"
                 class="size-6"
               >
+                <title>Heart</title>
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -91,6 +93,7 @@ function Board({ id = "example" }: { path?: string; id?: string }) {
             </div>
           </label>
           <button
+            type="button"
             class="btn btn-ghost btn-sm tooltip tooltip-bottom hidden sm:inline-block"
             data-tip="Copy Link"
             aria-label="Copy Link"
@@ -102,6 +105,7 @@ function Board({ id = "example" }: { path?: string; id?: string }) {
               fill="currentColor"
               class="w-5 h-5"
             >
+              <title>Clipboard</title>
               <path
                 fill-rule="evenodd"
                 d="M13.887 3.182c.396.037.79.08 1.183.128C16.194 3.45 17 4.414 17 5.517V16.75A2.25 2.25 0 0 1 14.75 19h-9.5A2.25 2.25 0 0 1 3 16.75V5.517c0-1.103.806-2.068 1.93-2.207.393-.048.787-.09 1.183-.128A3.001 3.001 0 0 1 9 1h2c1.373 0 2.531.923 2.887 2.182ZM7.5 4A1.5 1.5 0 0 1 9 2.5h2A1.5 1.5 0 0 1 12.5 4v.5h-5V4Z"
@@ -122,11 +126,13 @@ function Board({ id = "example" }: { path?: string; id?: string }) {
               fill="currentColor"
               class="w-5 h-5"
             >
+              <title>Arrow down in the tray</title>
               <path d="M10.75 2.75a.75.75 0 0 0-1.5 0v8.614L6.295 8.235a.75.75 0 1 0-1.09 1.03l4.25 4.5a.75.75 0 0 0 1.09 0l4.25-4.5a.75.75 0 0 0-1.09-1.03l-2.955 3.129V2.75Z" />
               <path d="M3.5 12.75a.75.75 0 0 0-1.5 0v2.5A2.75 2.75 0 0 0 4.75 18h10.5A2.75 2.75 0 0 0 18 15.25v-2.5a.75.75 0 0 0-1.5 0v2.5c0 .69-.56 1.25-1.25 1.25H4.75c-.69 0-1.25-.56-1.25-1.25v-2.5Z" />
             </svg>
           </a>
           <button
+            type="button"
             class="btn btn-ghost btn-sm tooltip tooltip-bottom hidden sm:inline-block"
             aria-label="Delete Retro"
             data-tip="Delete Retro"
@@ -142,10 +148,13 @@ function Board({ id = "example" }: { path?: string; id?: string }) {
                 fill-rule="evenodd"
                 d="M8.75 1A2.75 2.75 0 0 0 6 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 1 0 .23 1.482l.149-.022.841 10.518A2.75 2.75 0 0 0 7.596 19h4.807a2.75 2.75 0 0 0 2.742-2.53l.841-10.52.149.023a.75.75 0 0 0 .23-1.482A41.03 41.03 0 0 0 14 4.193V3.75A2.75 2.75 0 0 0 11.25 1h-2.5ZM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4ZM8.58 7.72a.75.75 0 0 0-1.5.06l.3 7.5a.75.75 0 1 0 1.5-.06l-.3-7.5Zm4.34.06a.75.75 0 1 0-1.5-.06l-.3 7.5a.75.75 0 1 0 1.5.06l.3-7.5Z"
                 clip-rule="evenodd"
-              />
+              >
+                <title>Trash can</title>
+              </path>
             </svg>
           </button>
           <button
+            type="button"
             class="btn btn-ghost btn-sm"
             onClick={() =>
               (document.getElementById("help_modal") as HTMLDialogElement)
@@ -229,7 +238,7 @@ function Board({ id = "example" }: { path?: string; id?: string }) {
           </ul>
           <div class="modal-action">
             <form method="dialog">
-              <button class="btn">Close</button>
+              <button type="button" class="btn">Close</button>
             </form>
           </div>
         </div>

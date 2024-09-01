@@ -1,8 +1,8 @@
-import { Signal } from "@preact/signals";
-import { Retro } from "../../retro";
-import { RecordModel } from "pocketbase";
+import type { Signal } from "@preact/signals";
+import type { Retro } from "../../retro";
+import type { RecordModel } from "pocketbase";
 import { SimpleFormat } from "../../simple_format";
-import { ItemStatus } from "./status";
+import type { ItemStatus } from "./status";
 
 function ViewItem(
   { retro, item, state }: {
@@ -25,6 +25,7 @@ function ViewItem(
     >
       <div class="flex items-center">
         <button
+          type="button"
           class={`flex flex-col items-center ${
             item.completed && "btn-disabled"
           }`}
@@ -46,6 +47,7 @@ function ViewItem(
           <span class="text-red-500 mr-2">{item.votes}</span>
         </button>
         <button
+          type="button"
           class={`flow flow-row text-left ${item.completed && "btn-disabled"}`}
           aria-label="Start Discussing"
           onClick={() => setActive()}
@@ -55,6 +57,7 @@ function ViewItem(
         </button>
       </div>
       <button
+        type="button"
         class={`absolute top-2 right-2 text-gray-400 hover:text-gray-600 ${
           item.completed && "btn-disabled"
         }`}

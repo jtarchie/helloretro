@@ -1,5 +1,5 @@
-import { Signal, signal } from "@preact/signals";
-import PocketBase, { RecordModel } from "pocketbase";
+import { type Signal, signal } from "@preact/signals";
+import PocketBase, { type RecordModel } from "pocketbase";
 
 class Retro {
   client: PocketBase;

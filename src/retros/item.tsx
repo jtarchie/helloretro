@@ -1,10 +1,10 @@
-import { Signal, useSignal } from "@preact/signals";
-import { Retro } from "../retro";
-import { RecordModel } from "pocketbase";
+import { type Signal, useSignal } from "@preact/signals";
+import type { Retro } from "../retro";
+import type { RecordModel } from "pocketbase";
 import { EditItem } from "./items/edit";
 import { ViewItem } from "./items/view";
 import { ActiveItem } from "./items/active";
-import { ItemStatus } from "./items/status";
+import type { ItemStatus } from "./items/status";
 
 function Item({ retro, item }: { retro: Signal<Retro>; item: RecordModel }) {
   let defaultState: ItemStatus = "view";

@@ -18,6 +18,7 @@ function App() {
             class="link link-hover"
             href="https://www.termsfeed.com/live/7cac2a09-dea0-4c4e-bda6-401aedd87fd5"
             target="_blank"
+            rel="noreferrer"
           >
             Terms of Service
           </a>
@@ -25,6 +26,7 @@ function App() {
             class="link link-hover"
             href="https://www.termsfeed.com/live/4d790e25-f499-427f-a3b2-a661e1db5b75"
             target="_blank"
+            rel="noreferrer"
           >
             Privacy Policy
           </a>
@@ -35,6 +37,7 @@ function App() {
             class="link link-hover"
             href="https://github.com/jtarchie/helloretro"
             target="_blank"
+            rel="noreferrer"
           >
             GitHub
           </a>
@@ -42,6 +45,7 @@ function App() {
             class="link link-hover"
             href="mailto:oh@helloretro.app"
             target="_blank"
+            rel="noreferrer"
           >
             Contact
           </a>

@@ -1,14 +1,22 @@
-import { Signal, useSignal } from "@preact/signals";
+import { computed, Signal, useSignal } from "@preact/signals";
 import { Retro } from "../retro";
 import { Item } from "./item";
 
 function Panel(
-  { retro, category, prompt, emoji, bg: [bgPanel, bgText, bgPlaceholder] }: {
+  {
+    retro,
+    category,
+    prompt,
+    emoji,
+    bg: [bgPanel, bgText, bgPlaceholder],
+    sortByVotes,
+  }: {
     category: string;
     emoji: string;
     retro: Signal<Retro>;
     prompt: string;
     bg: string[];
+    sortByVotes: Signal<boolean>; // New prop
   },
 ) {
   const description = useSignal("");
@@ -18,6 +26,16 @@ function Panel(
     description.value = "";
     event.preventDefault();
   };
+
+  const items = computed(() => {
+    const items = retro.value.items(category).value;
+
+    if (sortByVotes.value) {
+      return items.concat().sort((a, b) => b.votes - a.votes);
+    }
+
+    return items;
+  });
 
   return (
     <div class={`${bgPanel} p-4 rounded-lg space-y-4`}>
@@ -40,7 +58,7 @@ function Panel(
         />
       </form>
       <div class="space-y-2" role="list">
-        {retro.value.items(category).value.map((item) => {
+        {items.value.map((item) => {
           return <Item key={item.id} retro={retro} item={item} />;
         })}
       </div>

@@ -54,7 +54,9 @@ function ActiveItem(
         <div>
           <SimpleFormat classes="text-black" text={item.description} />
         </div>
-        <div class="badge badge-primary badge-lg">{timeDisplay}</div>
+        <div class="badge badge-primary badge-lg ml-2 w-[3.5rem] flex-none">
+          {timeDisplay}
+        </div>
       </div>
       <div class="flex justify-start space-x-2 p-2 bg-white rounded-b shadow-xl transform scale-110 -rotate-1 transition duration-300 ease-in">
         <button

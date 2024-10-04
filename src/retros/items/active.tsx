@@ -28,8 +28,21 @@ function ActiveItem(
     const updateTimer = () => {
       const timestamp = new Date(item.active);
 
+      // Check if the timestamp is a valid date
+      if (isNaN(timestamp.valueOf())) {
+        setTimeDisplay("00:00");
+        return;
+      }
+
       const now = Date.now();
       const elapsedTime = Math.floor((now - timestamp.valueOf()) / 1000); // in seconds
+
+      // If the timestamp is in the future or elapsedTime is negative, reset to "00:00"
+      if (elapsedTime < 0) {
+        setTimeDisplay("00:00");
+        return;
+      }
+
       if (elapsedTime >= 3600) {
         setTimeDisplay("99:99+");
         return;

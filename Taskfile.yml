@@ -10,5 +10,5 @@ tasks:
   default:
     cmds:
     - task: fmt
-    - yarn test
     - yarn biome lint --write --only=a11y src/
+    - yarn test

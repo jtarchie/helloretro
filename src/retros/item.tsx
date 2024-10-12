@@ -16,21 +16,21 @@ function Item({ retro, item }: { retro: Signal<Retro>; item: RecordModel }) {
   switch (state.value) {
     case "edit":
       return (
-        <div role="listitem">
+        <li>
           <EditItem retro={retro} item={item} state={state} />
-        </div>
+        </li>
       );
     case "active":
       return (
-        <div role="listitem">
+        <li>
           <ActiveItem retro={retro} item={item} state={state} />
-        </div>
+        </li>
       );
     default:
       return (
-        <div role="listitem">
+        <li>
           <ViewItem retro={retro} item={item} state={state} />
-        </div>
+        </li>
       );
   }
 }

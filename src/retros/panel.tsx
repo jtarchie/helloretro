@@ -57,11 +57,11 @@ function Panel(
           class={`input input-sm w-full p-2 rounded ${bgText} focus:bg-white focus:text-black text-white ${bgPlaceholder}`}
         />
       </form>
-      <div class="space-y-2" role="list">
+      <ol class="space-y-2">
         {items.value.map((item) => {
           return <Item key={item.id} retro={retro} item={item} />;
         })}
-      </div>
+      </ol>
     </div>
   );
 }

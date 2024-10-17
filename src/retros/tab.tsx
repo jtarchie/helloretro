@@ -1,10 +1,9 @@
 import { type Signal, useSignal } from "@preact/signals";
-import type { Retro } from "../retro";
+import { useRetro } from "../retro";
 import { Item } from "./item";
 
 function Tab(
   {
-    retro,
     category,
     prompt,
     emoji,
@@ -13,20 +12,22 @@ function Tab(
   }: {
     category: string;
     emoji: string;
-    retro: Signal<Retro>;
     prompt: string;
     checked: Signal<string>;
     bg: string[];
   },
 ) {
+  const retro = useRetro();
   const description = useSignal("");
 
   const addItem = (event: SubmitEvent) => {
     event.stopPropagation();
-    retro.value.addItem(description.value, category);
+    retro?.addItem(description.value, category);
     description.value = "";
     event.preventDefault();
   };
+
+  const items = retro?.items(category);
 
   return (
     <>
@@ -35,7 +36,7 @@ function Tab(
         name="panel-tab"
         role="tab"
         class="tab"
-        aria-label={`${emoji} (${retro.value.items(category).value.length})`}
+        aria-label={`${emoji} (${items?.value.length})`}
         checked={checked.value == category}
         onClick={() => checked.value = category}
       />
@@ -55,8 +56,8 @@ function Tab(
           />
         </form>
         <ol class="space-y-2">
-          {retro.value.items(category).value.map((item) => {
-            return <Item key={item.id} retro={retro} item={item} />;
+          {items?.value.map((item) => {
+            return <Item key={item.id} item={item} />;
           })}
         </ol>
       </div>

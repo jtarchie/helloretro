@@ -1,5 +1,5 @@
 import { Nav } from "./components/nav";
-import { Retro } from "./retro";
+import { Retro, RetroContext } from "./retro";
 import { Panel } from "./retros/panel";
 import { useSignal } from "@preact/signals";
 import { Tab } from "./retros/tab";
@@ -32,7 +32,7 @@ function Board({ id = "example" }: { path?: string; id?: string }) {
       colors: ["bg-purple-500", "bg-purple-400", "placeholder-purple-200"],
     },
   ];
-  const retro = useSignal(new Retro(id));
+  const retro = new Retro(id);
   const checked = useSignal("happy");
   const sortByVotes = useSignal(false); // New state for sorting
 
@@ -46,13 +46,13 @@ function Board({ id = "example" }: { path?: string; id?: string }) {
 
   const confirmDelete = async () => {
     if (globalThis.confirm("Are you sure you want to delete this retro?")) {
-      await retro.value.delete();
+      await retro.delete();
       window.location.href = "/";
     }
   };
 
   return (
-    <>
+    <RetroContext.Provider value={retro}>
       <Nav>
         <>
           <label class="swap swap-rotate">
@@ -174,7 +174,6 @@ function Board({ id = "example" }: { path?: string; id?: string }) {
                   category={column.type}
                   emoji={column.emoji}
                   prompt={column.prompt}
-                  retro={retro}
                   sortByVotes={sortByVotes} // Pass the sorting state
                 />
               );
@@ -195,7 +194,6 @@ function Board({ id = "example" }: { path?: string; id?: string }) {
                 checked={checked}
                 emoji={column.emoji}
                 prompt={column.prompt}
-                retro={retro}
               />
             );
           })}
@@ -243,7 +241,7 @@ function Board({ id = "example" }: { path?: string; id?: string }) {
           </div>
         </div>
       </dialog>
-    </>
+    </RetroContext.Provider>
   );
 }
 

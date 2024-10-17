@@ -1,23 +1,23 @@
 import { type Signal, signal } from "@preact/signals";
-import type { Retro } from "../../retro";
+import { useRetro } from "../../retro";
 import type { RecordModel } from "pocketbase";
 import type { ItemStatus } from "./status";
 
 function EditItem(
-  { retro, item, state }: {
-    retro: Signal<Retro>;
+  { item, state }: {
     item: RecordModel;
     state: Signal<ItemStatus>;
   },
 ) {
+  const retro = useRetro();
   const description = signal(item.description);
   const updatedDescription = (event: SubmitEvent) => {
-    retro.value.updateDescription(item.id, description.value);
+    retro?.updateDescription(item.id, description.value);
     state.value = "view";
     event.preventDefault();
   };
   const deleteItem = () => {
-    retro.value.deleteItem(item.id);
+    retro?.deleteItem(item.id);
     state.value = "view";
   };
 

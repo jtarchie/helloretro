@@ -1,19 +1,19 @@
 import type { Signal } from "@preact/signals";
-import type { Retro } from "../../retro";
+import { useRetro } from "../../retro";
 import type { RecordModel } from "pocketbase";
 import { SimpleFormat } from "../../simple_format";
 import type { ItemStatus } from "./status";
 
 function ViewItem(
-  { retro, item, state }: {
-    retro: Signal<Retro>;
+  { item, state }: {
     item: RecordModel;
     state: Signal<ItemStatus>;
   },
 ) {
-  const upvote = () => retro.value.vote(item.id, 1);
+  const retro = useRetro();
+  const upvote = () => retro?.vote(item.id, 1);
   const setActive = () => {
-    retro.value.setActiveItem(item.id);
+    retro?.setActiveItem(item.id);
     state.value = "active";
   };
 

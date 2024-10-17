@@ -1,5 +1,12 @@
 import { type Signal, signal } from "@preact/signals";
 import PocketBase, { type RecordModel } from "pocketbase";
+import { createContext } from "preact";
+import { useContext } from "preact/hooks";
+
+export const RetroContext = createContext<Retro | null>(null);
+export function useRetro() {
+  return useContext(RetroContext);
+}
 
 class Retro {
   client: PocketBase;

@@ -2,25 +2,25 @@ import type { RecordModel } from "pocketbase";
 import { SimpleFormat } from "../../simple_format";
 import { useEffect, useState } from "preact/hooks";
 import type { Signal } from "@preact/signals";
-import type { Retro } from "../../retro";
+import { useRetro } from "../../retro";
 import type { ItemStatus } from "./status";
 
 function ActiveItem(
-  { item, retro, state }: {
+  { item, state }: {
     item: RecordModel;
-    retro: Signal<Retro>;
     state: Signal<ItemStatus>;
   },
 ) {
+  const retro = useRetro();
   const [timeDisplay, setTimeDisplay] = useState("");
 
   const setCompleted = () => {
     state.value = "view";
-    retro.value.setCompletedItem(item.id);
+    retro?.setCompletedItem(item.id);
   };
   const setInactive = () => {
     state.value = "view";
-    retro.value.setInactiveItem(item.id);
+    retro?.setInactiveItem(item.id);
   };
 
   useEffect(() => {

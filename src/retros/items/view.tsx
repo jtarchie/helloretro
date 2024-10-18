@@ -1,20 +1,19 @@
-import type { Signal } from "@preact/signals";
 import { useRetro } from "../../retro";
 import type { RecordModel } from "pocketbase";
 import { SimpleFormat } from "../../simple_format";
 import type { ItemStatus } from "./status";
 
 function ViewItem(
-  { item, state }: {
+  { item, setState }: {
     item: RecordModel;
-    state: Signal<ItemStatus>;
+    setState: (value: ItemStatus) => void;
   },
 ) {
   const retro = useRetro();
   const upvote = () => retro?.vote(item.id, 1);
   const setActive = () => {
     retro?.setActiveItem(item.id);
-    state.value = "active";
+    setState("active");
   };
 
   return (
@@ -61,7 +60,7 @@ function ViewItem(
         class={`absolute top-2 right-2 text-gray-400 hover:text-gray-600 ${
           item.completed && "btn-disabled"
         }`}
-        onClick={() => state.value = "edit"}
+        onClick={() => setState("edit")}
         aria-label="Edit"
         disabled={item.completed}
       >

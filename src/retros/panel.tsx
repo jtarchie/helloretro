@@ -1,4 +1,4 @@
-import { computed, type Signal, useSignal } from "@preact/signals";
+import { type Signal, useSignal } from "@preact/signals";
 import { useRetro } from "../retro";
 import { Item } from "./item";
 
@@ -8,7 +8,7 @@ function Panel(
     prompt,
     emoji,
     bg: [bgPanel, bgText, bgPlaceholder],
-    sortByVotes,
+    // sortByVotes,
   }: {
     category: string;
     emoji: string;
@@ -26,16 +26,17 @@ function Panel(
     description.value = "";
     event.preventDefault();
   };
+  const items = retro?.useItems(category);
 
-  const items = computed(() => {
-    const items = retro?.items(category).value;
+  // const items = computed(() => {
+  //   const items = retro?.items(category).value;
 
-    if (sortByVotes.value) {
-      return items?.concat().sort((a, b) => b.votes - a.votes);
-    }
+  //   if (sortByVotes.value) {
+  //     return items?.concat().sort((a, b) => b.votes - a.votes);
+  //   }
 
-    return items;
-  });
+  //   return items;
+  // });
 
   return (
     <div class={`${bgPanel} p-4 rounded-lg space-y-4`}>
@@ -58,7 +59,7 @@ function Panel(
         />
       </form>
       <ol class="space-y-2">
-        {items.value?.map((item) => {
+        {items?.map((item) => {
           return <Item key={item.id} item={item} />;
         })}
       </ol>

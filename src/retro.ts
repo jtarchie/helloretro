@@ -1,7 +1,6 @@
-import { type Signal, signal } from "@preact/signals";
 import PocketBase, { type RecordModel } from "pocketbase";
 import { createContext } from "preact";
-import { useContext } from "preact/hooks";
+import { useContext, useEffect, useState } from "preact/hooks";
 
 export const RetroContext = createContext<Retro | null>(null);
 export function useRetro() {
@@ -11,63 +10,61 @@ export function useRetro() {
 class Retro {
   client: PocketBase;
   id: string;
-  itemSignals: Map<string, Signal<RecordModel[]>>;
 
   constructor(id: string) {
     this.id = id;
 
     this.client = new PocketBase();
     this.client.autoCancellation(false);
-
-    this.itemSignals = new Map<string, Signal<RecordModel[]>>();
   }
 
-  items(category: string): Signal<RecordModel[]> {
-    if (!this.itemSignals.has(category)) {
-      const items = signal<RecordModel[]>([]);
-      this.itemSignals.set(category, items);
+  useItems(category: string) {
+    const [items, setItems] = useState<RecordModel[]>([]);
 
-      // load the initial list
-      this.client.collection("items").getFullList({
-        sort: "created",
-        filter: this.client.filter(
-          "board_id={:board_id} && category={:category}",
-          { board_id: this.id, category: category },
-        ),
-      }).then((results) => {
-        items.value = results;
-      });
+    // subscribe to the latest items
+    useEffect(
+      (async () => {
+        this.client.collection("items").getFullList({
+          sort: "created",
+          filter: this.client.filter(
+            "board_id={:board_id} && category={:category}",
+            { board_id: this.id, category: category },
+          ),
+        }).then((results) => {
+          setItems(results);
+        });
 
-      // subscribe to the latest items
-      this.client.collection("items").subscribe("*", (event) => {
-        if (event.action == "create") {
-          items.value = [...items.value, event.record];
-        }
-
-        if (event.action == "update") {
-          items.value = items.value.map((item) => {
-            if (item.id == event.record.id) {
-              return event.record;
-            } else {
-              return item;
+        const unsubscribe = await this.client.collection("items").subscribe(
+          "*",
+          (event) => {
+            if (event.action === "create") {
+              setItems((prevItems) => [...prevItems, event.record]);
+            } else if (event.action === "update") {
+              setItems((prevItems) =>
+                prevItems.map((
+                  item,
+                ) => (item.id === event.record.id ? event.record : item))
+              );
+            } else if (event.action === "delete") {
+              setItems((prevItems) =>
+                prevItems.filter((item) => item.id !== event.record.id)
+              );
             }
-          });
-        }
+          },
+          {
+            filter: this.client.filter(
+              "board_id={:board_id} && category={:category}",
+              { board_id: this.id, category: category },
+            ),
+          },
+        );
 
-        if (event.action == "delete") {
-          items.value = items.value.filter((item) =>
-            item.id != event.record.id
-          );
-        }
-      }, {
-        filter: this.client.filter(
-          "board_id={:board_id} && category={:category}",
-          { board_id: this.id, category: category },
-        ),
-      });
-    }
+        return () => unsubscribe();
+      }) as () => void,
+      [],
+    );
 
-    return this.itemSignals.get(category) as Signal<RecordModel[]>;
+    return items;
   }
 
   addItem(description: string, category: string) {

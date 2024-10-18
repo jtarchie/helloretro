@@ -27,7 +27,7 @@ function Tab(
     event.preventDefault();
   };
 
-  const items = retro?.items(category);
+  const items = retro?.useItems(category);
 
   return (
     <>
@@ -36,7 +36,7 @@ function Tab(
         name="panel-tab"
         role="tab"
         class="tab"
-        aria-label={`${emoji} (${items?.value.length})`}
+        aria-label={`${emoji} (${items?.length})`}
         checked={checked.value == category}
         onClick={() => checked.value = category}
       />
@@ -56,7 +56,7 @@ function Tab(
           />
         </form>
         <ol class="space-y-2">
-          {items?.value.map((item) => {
+          {items?.map((item) => {
             return <Item key={item.id} item={item} />;
           })}
         </ol>

@@ -1,34 +1,38 @@
-import { useSignal } from "@preact/signals";
 import type { RecordModel } from "pocketbase";
 import { EditItem } from "./items/edit";
 import { ViewItem } from "./items/view";
 import { ActiveItem } from "./items/active";
 import type { ItemStatus } from "./items/status";
+import { useEffect, useState } from "preact/hooks";
 
 function Item({ item }: { item: RecordModel }) {
-  let defaultState: ItemStatus = "view";
-  if (!item.completed && item.active != "") {
-    defaultState = "active";
-  }
-  const state = useSignal<ItemStatus>(defaultState);
+  const [state, setState] = useState<ItemStatus>("view");
 
-  switch (state.value) {
+  useEffect(() => {
+    if (!item.completed && item.active != "") {
+      setState("active");
+    } else if (item.completed) {
+      setState("view");
+    }
+  }, [item, item.completed, item.active]);
+
+  switch (state) {
     case "edit":
       return (
         <li>
-          <EditItem item={item} state={state} />
+          <EditItem item={item} setState={setState} />
         </li>
       );
     case "active":
       return (
         <li>
-          <ActiveItem item={item} state={state} />
+          <ActiveItem item={item} setState={setState} />
         </li>
       );
     default:
       return (
         <li>
-          <ViewItem item={item} state={state} />
+          <ViewItem item={item} setState={setState} />
         </li>
       );
   }

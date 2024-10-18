@@ -23,9 +23,9 @@ routerAdd("GET", "/retros/:id/markdown", (context) => {
     markdown.push(`\n## ${category}`);
     itemsByCategory[category].forEach((item) => {
       markdown.push(
-        `- [${item.get("completed") ? "x" : " "}] ${
-          item.get("description").replace(/(\r\n|\n|\r)/gm, " ")
-        }`,
+        `- [${item.get("completed") ? "x" : " "}]${
+          item.get("votes") == 0 ? "" : ` (${item.get("votes")}❤️)`
+        } ${item.get("description").replace(/(\r\n|\n|\r)/gm, " ")}`,
       );
     });
   });

@@ -95,7 +95,7 @@ describe("create and use a retro", async () => {
 
     let markdownText = await getMarkdown();
     expect(markdownText).toContain(
-      `## happy\n- [ ] This worked perfectly the way it was expected.`,
+      `## happy\n- [ ] (1❤️) This worked perfectly the way it was expected.`,
     );
 
     await page.getByLabel("Edit").click();

@@ -4,6 +4,7 @@ import { Panel } from "./retros/panel";
 import { useSignal } from "@preact/signals";
 import { Tab } from "./retros/tab";
 import MediaQuery from "react-responsive";
+import { useState } from "preact/hooks";
 
 function Board({ id = "example" }: { path?: string; id?: string }) {
   const columns = [
@@ -34,10 +35,10 @@ function Board({ id = "example" }: { path?: string; id?: string }) {
   ];
   const retro = new Retro(id);
   const checked = useSignal("happy");
-  const sortByVotes = useSignal(false); // New state for sorting
+  const [sortByVotes, setSortByVotes] = useState(false); // New state for sorting
 
   const toggleSort = () => {
-    sortByVotes.value = !sortByVotes.value;
+    setSortByVotes(!sortByVotes);
   };
 
   const onShare = () => {
@@ -58,7 +59,7 @@ function Board({ id = "example" }: { path?: string; id?: string }) {
           <label class="swap swap-rotate">
             <input
               type="checkbox"
-              checked={sortByVotes.value}
+              checked={sortByVotes}
               onChange={toggleSort}
             />
 
@@ -194,6 +195,7 @@ function Board({ id = "example" }: { path?: string; id?: string }) {
                 checked={checked}
                 emoji={column.emoji}
                 prompt={column.prompt}
+                sortByVotes={sortByVotes}
               />
             );
           })}

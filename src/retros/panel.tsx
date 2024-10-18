@@ -1,6 +1,7 @@
-import { type Signal, useSignal } from "@preact/signals";
+import { useSignal } from "@preact/signals";
 import { useRetro } from "../retro";
 import { Item } from "./item";
+import { useEffect, useState } from "preact/hooks";
 
 function Panel(
   {
@@ -8,13 +9,13 @@ function Panel(
     prompt,
     emoji,
     bg: [bgPanel, bgText, bgPlaceholder],
-    // sortByVotes,
+    sortByVotes,
   }: {
     category: string;
     emoji: string;
     prompt: string;
     bg: string[];
-    sortByVotes: Signal<boolean>; // New prop
+    sortByVotes: boolean;
   },
 ) {
   const retro = useRetro();
@@ -27,16 +28,15 @@ function Panel(
     event.preventDefault();
   };
   const items = retro?.useItems(category);
+  const [sortedItems, setSortedItems] = useState(items);
 
-  // const items = computed(() => {
-  //   const items = retro?.items(category).value;
-
-  //   if (sortByVotes.value) {
-  //     return items?.concat().sort((a, b) => b.votes - a.votes);
-  //   }
-
-  //   return items;
-  // });
+  useEffect(() => {
+    if (sortByVotes) {
+      setSortedItems(items?.concat().sort((a, b) => b.votes - a.votes));
+    } else {
+      setSortedItems(items);
+    }
+  }, [items, sortByVotes]);
 
   return (
     <div class={`${bgPanel} p-4 rounded-lg space-y-4`}>
@@ -59,7 +59,7 @@ function Panel(
         />
       </form>
       <ol class="space-y-2">
-        {items?.map((item) => {
+        {sortedItems?.map((item) => {
           return <Item key={item.id} item={item} />;
         })}
       </ol>

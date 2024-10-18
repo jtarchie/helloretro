@@ -1,6 +1,7 @@
 import { type Signal, useSignal } from "@preact/signals";
 import { useRetro } from "../retro";
 import { Item } from "./item";
+import { useEffect, useState } from "preact/hooks";
 
 function Tab(
   {
@@ -9,12 +10,14 @@ function Tab(
     emoji,
     checked,
     bg: [bgPanel, bgText, bgPlaceholder],
+    sortByVotes,
   }: {
     category: string;
     emoji: string;
     prompt: string;
     checked: Signal<string>;
     bg: string[];
+    sortByVotes: boolean;
   },
 ) {
   const retro = useRetro();
@@ -28,6 +31,15 @@ function Tab(
   };
 
   const items = retro?.useItems(category);
+  const [sortedItems, setSortedItems] = useState(items);
+
+  useEffect(() => {
+    if (sortByVotes) {
+      setSortedItems(items?.concat().sort((a, b) => b.votes - a.votes));
+    } else {
+      setSortedItems(items);
+    }
+  }, [items, sortByVotes]);
 
   return (
     <>
@@ -36,7 +48,7 @@ function Tab(
         name="panel-tab"
         role="tab"
         class="tab"
-        aria-label={`${emoji} (${items?.length})`}
+        aria-label={`${emoji} (${sortedItems?.length})`}
         checked={checked.value == category}
         onClick={() => checked.value = category}
       />
@@ -56,7 +68,7 @@ function Tab(
           />
         </form>
         <ol class="space-y-2">
-          {items?.map((item) => {
+          {sortedItems?.map((item) => {
             return <Item key={item.id} item={item} />;
           })}
         </ol>

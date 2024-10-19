@@ -12,7 +12,8 @@ const PORT = 3001;
 describe("create and use a retro", async () => {
   let serverProcess: ChildProcess;
   let browser: Browser;
-  let page: Page;
+  let leader: Page;
+  let follower: Page;
   let tempDirPath: string;
 
   beforeAll(async () => {
@@ -42,7 +43,8 @@ describe("create and use a retro", async () => {
     await new Promise((resolve) => setTimeout(resolve, 100)); // Adjust timeout based on how quickly your server starts
 
     browser = await chromium.launch({ headless: true });
-    page = await browser.newPage();
+    leader = await browser.newPage();
+    follower = await browser.newPage();
   });
 
   afterAll(async () => {
@@ -56,15 +58,16 @@ describe("create and use a retro", async () => {
   });
 
   const addItem = async (description: string) => {
-    await expect(page.locator("#app")).not.toContainText(description);
-    await page.getByPlaceholder("I'm glad that...").click();
-    await page.getByPlaceholder("I'm glad that...").fill(description);
-    await page.getByPlaceholder("I'm glad that...").press("Enter");
-    await expect(page.locator("#app")).toContainText(description);
+    await expect(leader.locator("#app")).not.toContainText(description);
+    await leader.getByPlaceholder("I'm glad that...").click();
+    await leader.getByPlaceholder("I'm glad that...").fill(description);
+    await leader.getByPlaceholder("I'm glad that...").press("Enter");
+    await expect(leader.locator("#app")).toContainText(description);
+    await expect(follower.locator("#app")).toContainText(description);
   };
 
   const getMarkdown = async () => {
-    const boardID = page.url().split("/").pop();
+    const boardID = leader.url().split("/").pop();
     const markdownUrl = `http://localhost:${PORT}/retros/${boardID}/markdown`;
     const response = await fetch(markdownUrl);
 
@@ -72,43 +75,56 @@ describe("create and use a retro", async () => {
   };
 
   test("should work", async () => {
-    await page.goto(`http://localhost:${PORT}`);
+    await leader.goto(`http://localhost:${PORT}`);
 
-    const link = page.getByRole("link", { name: /Start your retro/ });
+    const link = leader.getByRole("link", { name: /Start your retro/ });
     await expect(link).toBeVisible();
     await link.click();
 
+    await follower.goto(leader.url());
+
     await addItem("This worked perfectly.");
 
-    await page.getByLabel("Like").click();
-    await expect(page.getByLabel("Like")).toContainText("1");
+    await leader.getByLabel("Like").click();
+    await expect(leader.getByLabel("Like")).toContainText("1");
 
-    await page.getByLabel("Edit").click();
-    await page.getByPlaceholder("Description").click();
-    await page.getByPlaceholder("Description").fill(
+    await follower.getByLabel("Like").click();
+    await expect(follower.getByLabel("Like")).toContainText("2");
+    await expect(leader.getByLabel("Like")).toContainText("2");
+
+    await leader.getByLabel("Edit").click();
+    await leader.getByPlaceholder("Description").click();
+    await leader.getByPlaceholder("Description").fill(
       "This worked perfectly the way it was expected.",
     );
-    await page.getByLabel("Update the description").click();
-    await expect(page.locator("#app")).toContainText(
+    await leader.getByLabel("Update the description").click();
+    await expect(leader.locator("#app")).toContainText(
+      "This worked perfectly the way it was expected.",
+    );
+    await expect(follower.locator("#app")).toContainText(
       "This worked perfectly the way it was expected.",
     );
 
     let markdownText = await getMarkdown();
     expect(markdownText).toContain(
-      `## happy\n- [ ] (1❤️) This worked perfectly the way it was expected.`,
+      `## happy\n- [ ] (2❤️) This worked perfectly the way it was expected.`,
     );
 
-    await page.getByLabel("Edit").click();
-    await page.getByLabel("Delete the description").click();
-    await expect(page.locator("#app")).not.toContainText(
+    await leader.getByLabel("Edit").click();
+    await leader.getByLabel("Delete the description").click();
+    await expect(leader.locator("#app")).not.toContainText(
+      "This worked perfectly the way it was expected.",
+    );
+    await expect(follower.locator("#app")).not.toContainText(
       "This worked perfectly the way it was expected.",
     );
 
     await addItem("Start this item.");
-    await page.getByLabel("Start Discussing").click();
-    await expect(page.locator("#app")).toContainText(/00:\d\d/);
+    await leader.getByLabel("Start Discussing").click();
+    await expect(leader.locator("#app")).toContainText(/00:\d\d/);
+    await expect(follower.locator("#app")).toContainText(/00:\d\d/);
 
-    await page.getByLabel("Complete").click();
+    await leader.getByLabel("Complete").click();
     markdownText = await getMarkdown();
     expect(markdownText).toContain(
       `- [x] Start this item.`,

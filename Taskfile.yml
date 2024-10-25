@@ -3,13 +3,13 @@ version: 3
 tasks:
   fmt:
     cmds:
-    - deno fmt .
-    - deno lint src/ pb_hooks/
+      - deno fmt .
+      - deno lint src/ pb_hooks/
   server: pocketbase serve --publicDir dist/ --dev
   build: yarn run build --watch --base=http://127.0.0.1:8090
   default:
     cmds:
-    - task: fmt
-    - yarn run tsc
-    - yarn biome lint --write --only=a11y src/
-    - yarn test
+      - task: fmt
+      - yarn run tsc
+      - yarn biome lint --write --only=a11y src/
+      - yarn test

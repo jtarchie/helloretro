@@ -48,7 +48,7 @@ function Board({ id = "example" }: { path?: string; id?: string }) {
   const confirmDelete = async () => {
     if (globalThis.confirm("Are you sure you want to delete this retro?")) {
       await retro.delete();
-      window.location.href = "/";
+      globalThis.location.href = "/";
     }
   };
 

@@ -238,7 +238,7 @@ function Board({ id = "example" }: { path?: string; id?: string }) {
           </ul>
           <div class="modal-action">
             <form method="dialog">
-              <button type="button" class="btn">Close</button>
+              <button class="btn">Close</button>
             </form>
           </div>
         </div>

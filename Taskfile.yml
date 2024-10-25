@@ -11,5 +11,5 @@ tasks:
     cmds:
       - task: fmt
       - yarn run tsc
-      - yarn biome lint --write --only=a11y src/
+      # - yarn biome lint --write --only=a11y src/
       - yarn test

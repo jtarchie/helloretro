@@ -236,11 +236,9 @@ function Board({ id = "example" }: { path?: string; id?: string }) {
               received.
             </li>
           </ul>
-          <div class="modal-action">
-            <form method="dialog">
-              <button class="btn">Close</button>
-            </form>
-          </div>
+          <form method="dialog" class="modal-backdrop">
+            <button>close</button>
+          </form>
         </div>
       </dialog>
     </RetroContext.Provider>

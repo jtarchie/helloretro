@@ -14,14 +14,14 @@
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
-    "@playwright/test": "^1.48.1",
+    "@playwright/test": "^1.48.2",
     "@preact/preset-vite": "^2.9.1",
     "@preact/signals": "^1.3.0",
-    "@types/node": "^22.8.0",
-    "@vitest/ui": "^2.1.3",
+    "@types/node": "^22.9.0",
+    "@vitest/ui": "^2.1.4",
     "autoprefixer": "^10.4.20",
-    "daisyui": "^4.12.13",
-    "playwright": "^1.48.1",
+    "daisyui": "^4.12.14",
+    "playwright": "^1.48.2",
     "pocketbase": "^0.21.5",
     "postcss": "^8.4.47",
     "preact-router": "^4.1.2",
@@ -29,7 +29,7 @@
     "tailwindcss": "^3.4.14",
     "typescript": "^5.6.3",
     "vite": "^5.4.10",
-    "vitest": "^2.1.3"
+    "vitest": "^2.1.4"
   },
   "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }

@@ -10,7 +10,7 @@ primary_region = 'sjc'
 dockerfile = "Dockerfile"
 
 [build.args]
-PB_VERSION = "0.22.23"
+PB_VERSION = "0.22.29"
 
 [http_service]
 internal_port = 8080

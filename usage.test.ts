@@ -9,7 +9,7 @@ import path from "path";
 
 const PORT = 3001;
 
-describe("create and use a retro", async () => {
+describe("create and use a retro", () => {
   let serverProcess: ChildProcess;
   let browser: Browser;
   let leader: Page;

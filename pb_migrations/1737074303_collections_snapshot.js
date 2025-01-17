@@ -994,6 +994,6 @@ migrate((app) => {
   ];
 
   return app.importCollections(snapshot, false);
-}, (app) => {
+}, (_app) => {
   return null;
 });

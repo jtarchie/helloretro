@@ -5,7 +5,7 @@ cronAdd("cleanup unused boards", "0 0 * * 0", () => {
     new Date().getTime() - (7 * 24 * 60 * 60 * 1000),
   );
 
-  const boards = $app.dao().findRecordsByFilter(
+  const boards = $app.findRecordsByFilter(
     "boards", // collection
     "created < {:ago}", // filter
     "", // sort
@@ -15,7 +15,7 @@ cronAdd("cleanup unused boards", "0 0 * * 0", () => {
   );
 
   boards.forEach((record) => {
-    const items = $app.dao().findRecordsByFilter(
+    const items = $app.findRecordsByFilter(
       "items", // collection
       "board_id = {:board_id}", // filter
       "", // sort
@@ -26,7 +26,7 @@ cronAdd("cleanup unused boards", "0 0 * * 0", () => {
 
     if (items.length == 0) {
       console.log("record", record.id, record.getCreated());
-      $app.dao().deleteRecord(record);
+      $app.delete(record);
     }
   });
 });

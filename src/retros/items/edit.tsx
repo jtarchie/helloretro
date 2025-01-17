@@ -11,13 +11,13 @@ function EditItem(
 ) {
   const retro = useRetro();
   const description = signal(item.description);
-  const updatedDescription = (event: SubmitEvent) => {
-    retro?.updateDescription(item.id, description.value);
-    setState("view");
+  const updatedDescription = async (event: SubmitEvent) => {
     event.preventDefault();
+    await retro?.updateDescription(item.id, description.value);
+    setState("view");
   };
-  const deleteItem = () => {
-    retro?.deleteItem(item.id);
+  const deleteItem = async () => {
+    await retro?.deleteItem(item.id);
     setState("view");
   };
 

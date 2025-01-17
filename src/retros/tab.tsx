@@ -23,11 +23,11 @@ function Tab(
   const retro = useRetro();
   const description = useSignal("");
 
-  const addItem = (event: SubmitEvent) => {
+  const addItem = async (event: SubmitEvent) => {
     event.stopPropagation();
-    retro?.addItem(description.value, category);
-    description.value = "";
     event.preventDefault();
+    await retro?.addItem(description.value, category);
+    description.value = "";
   };
 
   const items = retro?.useItems(category);

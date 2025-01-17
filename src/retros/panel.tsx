@@ -22,10 +22,10 @@ function Panel(
 
   const description = useSignal("");
 
-  const addItem = (event: SubmitEvent) => {
-    retro?.addItem(description.value, category);
-    description.value = "";
+  const addItem = async (event: SubmitEvent) => {
     event.preventDefault();
+    await retro?.addItem(description.value, category);
+    description.value = "";
   };
   const items = retro?.useItems(category);
   const [sortedItems, setSortedItems] = useState(items);

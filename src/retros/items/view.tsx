@@ -10,9 +10,9 @@ function ViewItem(
   },
 ) {
   const retro = useRetro();
-  const upvote = () => retro?.vote(item.id, 1);
-  const setActive = () => {
-    retro?.setActiveItem(item.id);
+  const upvote = async () => await retro?.vote(item.id, 1);
+  const setActive = async () => {
+    await retro?.setActiveItem(item.id);
     setState("active");
   };
 

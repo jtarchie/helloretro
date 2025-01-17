@@ -67,8 +67,8 @@ class Retro {
     return items;
   }
 
-  addItem(description: string, category: string) {
-    this.client.collection("items").create({
+  async addItem(description: string, category: string) {
+    await this.client.collection("items").create({
       description: description,
       votes: 0,
       category: category,
@@ -76,36 +76,36 @@ class Retro {
     });
   }
 
-  deleteItem(id: string) {
-    this.client.collection("items").delete(id);
+  async deleteItem(id: string) {
+    await this.client.collection("items").delete(id);
   }
 
-  updateDescription(id: string, description: string) {
-    this.client.collection("items").update(id, {
+  async updateDescription(id: string, description: string) {
+    await this.client.collection("items").update(id, {
       description: description,
     });
   }
 
-  vote(id: string, delta: number) {
-    this.client.collection("items").update(id, {
+  async vote(id: string, delta: number) {
+    await this.client.collection("items").update(id, {
       "votes+": delta,
     });
   }
 
-  setActiveItem(id: string) {
-    this.client.collection("items").update(id, {
+  async setActiveItem(id: string) {
+    await this.client.collection("items").update(id, {
       "active": new Date().toISOString(),
     });
   }
 
-  setInactiveItem(id: string) {
-    this.client.collection("items").update(id, {
+  async setInactiveItem(id: string) {
+    await this.client.collection("items").update(id, {
       "active": "",
     });
   }
 
-  setCompletedItem(id: string) {
-    this.client.collection("items").update(id, {
+  async setCompletedItem(id: string) {
+    await this.client.collection("items").update(id, {
       "completed": true,
     });
   }

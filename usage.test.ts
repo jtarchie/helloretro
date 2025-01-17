@@ -67,11 +67,12 @@ describe("create and use a retro", async () => {
   };
 
   const getMarkdown = async () => {
-    const boardID = leader.url().split("/").pop();
+    const boardID = leader.url().split("/").pop()?.replace("?", "");
     const markdownUrl = `http://localhost:${PORT}/retros/${boardID}/markdown`;
     const response = await fetch(markdownUrl);
+    const markdownContent = await response.text();
 
-    return await response.text();
+    return markdownContent;
   };
 
   test("should work", async () => {

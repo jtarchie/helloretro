@@ -1,14 +1,14 @@
 /// <reference path="../pb_data/types.d.ts" />
 
-routerAdd("GET", "/retros/:id/markdown", (context) => {
-  const id = context.pathParam("id");
+routerAdd("GET", "/retros/{id}/markdown", (event) => {
+  const id = event.request.pathValue("id");
 
-  const record = $app.dao().findRecordById("boards", id);
+  const record = event.app.findRecordById("boards", id);
 
   const date = record.getDateTime("created").time().format("2006-01-02");
   const markdown = [`# ${date}`];
 
-  const items = $app.dao().findRecordsByFilter("items", `board_id = '${id}'`);
+  const items = event.app.findRecordsByFilter("items", `board_id = '${id}'`);
 
   const itemsByCategory = {};
   items.forEach((item) => {
@@ -32,14 +32,14 @@ routerAdd("GET", "/retros/:id/markdown", (context) => {
 
   const markdownText = markdown.join("\n");
 
-  context.response().header().set(
+  event.response.header().set(
     "Content-Disposition",
     `attachment; filename="retrospective-${date}.md"`,
   );
-  context.response().header().set(
+  event.response.header().set(
     "Content-Type",
     "text/markdown; charset=utf-8",
   );
 
-  return context.string(200, markdownText);
+  return event.string(200, markdownText);
 });

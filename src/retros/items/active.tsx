@@ -13,13 +13,13 @@ function ActiveItem(
   const retro = useRetro();
   const [timeDisplay, setTimeDisplay] = useState("");
 
-  const setCompleted = () => {
+  const setCompleted = async () => {
     setState("view");
-    retro?.setCompletedItem(item.id);
+    await retro?.setCompletedItem(item.id);
   };
-  const setInactive = () => {
+  const setInactive = async () => {
     setState("view");
-    retro?.setInactiveItem(item.id);
+    await retro?.setInactiveItem(item.id);
   };
 
   useEffect(() => {

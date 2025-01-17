@@ -1,13 +1,13 @@
 /// <reference path="../pb_data/types.d.ts" />
 
-routerAdd("GET", "/retros/new", (context) => {
-  const collection = $app.dao().findCollectionByNameOrId("boards");
+routerAdd("GET", "/retros/new", (event) => {
+  const collection = $app.findCollectionByNameOrId("boards");
 
   const record = new Record(collection, {
     archived: false,
   });
 
-  $app.dao().saveRecord(record);
+  $app.save(record);
 
-  return context.redirect(302, `/retros/${record.get("id")}`);
+  return event.redirect(302, `/retros/${record.get("id")}`);
 });

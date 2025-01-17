@@ -203,6 +203,11 @@ function Board({ id = "example" }: { path?: string; id?: string }) {
       </MediaQuery>
       <dialog id="help_modal" class="modal sm:modal-middle">
         <div class="modal-box">
+          <form method="dialog">
+            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+              ✕
+            </button>
+          </form>
           <h3 class="font-bold text-lg">About HelloRetro</h3>
           <p class="mb-4">
             HelloRetro is a retrospective tool designed to facilitate agile
@@ -236,9 +241,6 @@ function Board({ id = "example" }: { path?: string; id?: string }) {
               received.
             </li>
           </ul>
-          <form method="dialog" class="modal-backdrop">
-            <button>close</button>
-          </form>
         </div>
       </dialog>
     </RetroContext.Provider>

@@ -29,7 +29,7 @@ timeout = "5s"
 path = "/api/health"
 
 [[vm]]
-memory = '1gb'
+memory = '512mb'
 cpu_kind = 'shared'
 cpus = 1
 

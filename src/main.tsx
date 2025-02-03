@@ -11,7 +11,7 @@ function App() {
         <Home path="/" />
         <Board path="/retros/:id" />
       </Router>
-      <footer class="footer p-10 bg-base-300 text-base-content">
+      <footer class="footer sm:footer-horizontal p-10 bg-base-300 text-base-content">
         <nav>
           <h6 class="footer-title">Legal</h6>
           <a

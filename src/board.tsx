@@ -166,8 +166,8 @@ function Board({ id = "example" }: { path?: string; id?: string }) {
         </>
       </Nav>
       <MediaQuery minWidth={768}>
-        <div class="flex-grow hidden md:block">
-          <div class="flex-grow grid grid-cols-4 gap-4 p-4 md:h-full">
+        <div class="grow hidden md:block">
+          <div class="grow grid grid-cols-4 gap-4 p-4 md:h-full">
             {columns.map((column) => {
               return (
                 <Panel
@@ -185,7 +185,7 @@ function Board({ id = "example" }: { path?: string; id?: string }) {
       <MediaQuery maxWidth={768}>
         <div
           role="tablist"
-          class="tabs tabs-bordered md:hidden grid grid-cols-1"
+          class="tabs tabs-box md:hidden"
         >
           {columns.map((column) => {
             return (

@@ -55,7 +55,7 @@ function Panel(
           value={description}
           onInput={(event) => description.value = event.currentTarget.value}
           placeholder={prompt}
-          class={`input input-sm w-full p-2 rounded ${bgText} focus:bg-white focus:text-black text-white ${bgPlaceholder}`}
+          class={`input input-sm w-full p-2 rounded-sm ${bgText} focus:bg-white focus:text-black text-white ${bgPlaceholder}`}
         />
       </form>
       <ol class="space-y-2">

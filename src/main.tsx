@@ -51,10 +51,20 @@ function App() {
           </a>
         </nav>
       </footer>
-      <footer class="footer px-10 py-4 border-t bg-base-200 text-base-content border-base-300">
-        <aside class="items-center grid-flow-col">
+      <footer class="footer footer-center px-10 py-4 border-t bg-base-200 text-base-content border-base-300">
+        <aside>
           <p>
-            Copyright © 2024 -
+            Made with ❤️ for ❄️ in Colorado{" "}
+            <a href="https://www.buymeacoffee.com/jtarchie" target="_blank">
+              <img
+                src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png"
+                alt="Buy Me A Coffee"
+                style="height: 60px !important;width: 217px !important;"
+              />
+            </a>
+          </p>
+          <p>
+            Copyright © 2024 -&nbsp;
             <a href="https://jtarchie.com" class="link link-hover" data-native>
               JT Archie
             </a>

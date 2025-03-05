@@ -1,4 +1,4 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 @plugin "daisyui";
 
 /*
@@ -20,5 +20,5 @@
 }
 
 button {
-  cursor: pointer
+  cursor: pointer;
 }

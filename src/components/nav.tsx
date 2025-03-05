@@ -1,6 +1,6 @@
 import type { JSX } from "preact/compat";
 
-function Nav({ children }: { children?: JSX.Element }) {
+function Nav({ children }: { children?: JSX.Element | JSX.Element[] }) {
   return (
     <div class="navbar bg-base-100">
       <div class="flex-1 ">

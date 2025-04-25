@@ -1,15 +1,20 @@
-import { render } from "preact";
+import {
+  hydrate,
+  LocationProvider,
+  prerender as ssr,
+  Route,
+  Router,
+} from "preact-iso";
 import "./index.css";
 import { Board } from "./board";
-import Router from "preact-router";
 import { Home } from "./home";
 
 function App() {
   return (
-    <>
+    <LocationProvider>
       <Router>
-        <Home path="/" />
-        <Board path="/retros/:id" />
+        <Route path="/" component={Home} />
+        <Route path="/retros/:id" component={Board} />
       </Router>
       <footer class="footer sm:footer-horizontal p-10 bg-base-300 text-base-content">
         <nav>
@@ -71,8 +76,14 @@ function App() {
           </p>
         </aside>
       </footer>
-    </>
+    </LocationProvider>
   );
 }
 
-render(<App />, document.getElementById("app")!);
+if (typeof window !== "undefined") {
+  hydrate(<App />, document.getElementById("app")!);
+}
+
+export async function prerender(data) {
+  return await ssr(<App {...data} />);
+}

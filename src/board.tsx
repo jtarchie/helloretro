@@ -118,7 +118,7 @@ function Board({ id = "example" }: { path?: string; id?: string }) {
           href={`/retros/${id}/markdown`}
           aria-label="Export to Markdown"
           data-tip="Export to Markdown"
-          data-native
+          target="_top"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

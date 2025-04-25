@@ -21,7 +21,7 @@ function Home({}: { path?: string }) {
                 collaborative discussion, allowing team members to share their
                 thoughts and ideas on how to move forward.
               </p>
-              <a href="/retros/new" class="btn btn-primary btn-lg" data-native>
+              <a href="/retros/new" class="btn btn-primary btn-lg" target="_top">
                 Start your retro
               </a>
             </div>

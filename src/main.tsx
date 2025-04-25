@@ -70,7 +70,7 @@ function App() {
           </p>
           <p>
             Copyright © 2024 -&nbsp;
-            <a href="https://jtarchie.com" class="link link-hover" data-native>
+            <a href="https://jtarchie.com" class="link link-hover" target="_top">
               JT Archie
             </a>
           </p>

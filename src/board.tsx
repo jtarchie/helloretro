@@ -38,10 +38,6 @@ function Board({ id = "example" }: { path?: string; id?: string }) {
   const checked = useSignal("happy");
   const [sortByVotes, setSortByVotes] = useState(false); // New state for sorting
 
-  const toggleSort = () => {
-    setSortByVotes(!sortByVotes);
-  };
-
   const onShare = () => {
     navigator.clipboard.writeText(`${import.meta.env.BASE_URL}/retros/${id}`);
   };
@@ -56,44 +52,44 @@ function Board({ id = "example" }: { path?: string; id?: string }) {
   return (
     <RetroContext.Provider value={retro}>
       <Nav>
-        <label class="swap swap-rotate">
-          <input
-            type="checkbox"
-            checked={sortByVotes}
-            onChange={toggleSort}
-          />
-
-          <div class="swap-on">
+        <div class="dropdown">
+          <div tabIndex={0} role="button" class="btn btn-ghost btn-sm">
+            Sort by: {sortByVotes ? "Votes" : "Time"}
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
+              width="16"
+              height="16"
               fill="currentColor"
-              class="w-5 h-5 text-red-500 mr-2"
-              aria-hidden="true"
+              class="ml-1"
+              viewBox="0 0 16 16"
             >
-              <title>Multiple Users</title>
-              <path d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3" />
+              <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
             </svg>
           </div>
-          <div class="swap-off">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              class="size-6"
-            >
-              <title>Heart</title>
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="m9.653 16.915-.005-.003-.019-.01a20.759 20.759 0 0 1-1.162-.682 22.045 22.045 0 0 1-2.582-1.9C4.045 12.733 2 10.352 2 7.5a4.5 4.5 0 0 1 8-2.828A4.5 4.5 0 0 1 18 7.5c0 2.852-2.044 5.233-3.885 6.82a22.049 22.049 0 0 1-3.744 2.582l-.019.01-.005.003h-.002a.739.739 0 0 1-.69.001l-.002-.001Z"
-              />
-              <path d="m9.653 16.915-.005-.003-.019-.01a20.759 20.759 0 0 1-1.162-.682 22.045 22.045 0 0 1-2.582-1.9C4.045 12.733 2 10.352 2 7.5a4.5 4.5 0 0 1 8-2.828A4.5 4.5 0 0 1 18 7.5c0 2.852-2.044 5.233-3.885 6.82a22.049 22.049 0 0 1-3.744 2.582l-.019.01-.005.003h-.002a.739.739 0 0 1-.69.001l-.002-.001Z" />
-            </svg>
-          </div>
-        </label>
+          <ul
+            tabIndex={0}
+            class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
+          >
+            <li>
+              <button
+                type="button"
+                onClick={() => setSortByVotes(false)}
+                aria-selected={!sortByVotes}
+              >
+                Sort by time
+              </button>
+            </li>
+            <li>
+              <button
+                type="button"
+                onClick={() => setSortByVotes(true)}
+                aria-selected={sortByVotes}
+              >
+                Sort by votes
+              </button>
+            </li>
+          </ul>
+        </div>
         <button
           type="button"
           class="btn btn-ghost btn-sm tooltip tooltip-bottom hidden sm:inline-block"

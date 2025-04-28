@@ -1,4 +1,4 @@
-import { afterAll, beforeAll, describe, test } from "vitest";
+import { afterEach, beforeEach, describe, test } from "vitest";
 import { chromium } from "playwright";
 import type { Browser, Page } from "playwright";
 import { expect } from "@playwright/test";
@@ -16,7 +16,7 @@ describe("create and use a retro", () => {
   let follower: Page;
   let tempDirPath: string;
 
-  beforeAll(async () => {
+  beforeEach(async () => {
     // Create a temporary directory for the pocketbase data
     tempDirPath = await fs.mkdtemp(path.join(os.tmpdir(), "pocketbase-"));
 
@@ -47,7 +47,7 @@ describe("create and use a retro", () => {
     follower = await browser.newPage();
   });
 
-  afterAll(async () => {
+  afterEach(async () => {
     await browser?.close();
 
     // Kill the pocketbase server process
@@ -138,4 +138,72 @@ describe("create and use a retro", () => {
     // await page.getByLabel('OK').click();
     // await expect(page.locator('#app')).toContainText(/Start your retro/);
   }, 10_000);
+
+  test("should handle user authentication", async () => {
+    // Test username registration, login, and user-created boards
+    const testUsername = `user_${Date.now()}`;
+    const testPassword = "securePassword123";
+
+    // Go to the home page
+    await leader.goto(`http://localhost:${PORT}`);
+
+    // Navigate to signup page
+    await leader.getByRole("link", { name: "Sign up" }).click();
+    await expect(leader).toHaveURL(`http://localhost:${PORT}/signup`);
+
+    // Fill in the signup form
+    await leader.getByPlaceholder("Choose a username").fill(testUsername);
+    await leader.getByPlaceholder("Create a password").fill(testPassword);
+    await leader.getByPlaceholder("Confirm your password").fill(testPassword);
+
+    // Submit the form
+    await leader.getByRole("button", { name: "Sign Up" }).click();
+
+    // After signup, user should be redirected to home and be logged in
+    await expect(leader).toHaveURL(`http://localhost:${PORT}/`);
+
+    // Verify user is logged in (avatar should be visible instead of login/signup buttons)
+    await expect(leader.locator(".avatar")).toBeVisible();
+
+    // Create a board while logged in
+    await leader.getByRole("button", { name: "Start your retro" }).click();
+
+    // Get current board URL to verify later
+    const loggedInBoardUrl = leader.url();
+    await expect(leader.getByPlaceholder("I'm glad that...")).toBeVisible();
+
+    // Log out
+    await leader.locator(".avatar").click();
+    await leader.getByRole("link", { name: "Logout" }).click();
+
+    // Verify user is logged out (login/signup buttons should be visible)
+    await expect(leader.getByRole("link", { name: "Login" })).toBeVisible();
+    await expect(leader.getByRole("link", { name: "Sign up" })).toBeVisible();
+
+    // Login with created user
+    await leader.getByRole("link", { name: "Login" }).click();
+    await leader.getByPlaceholder("Enter your username").fill(testUsername);
+    await leader.getByPlaceholder("Enter your password").fill(testPassword);
+    await leader.getByRole("button", { name: "Login" }).click();
+
+    // After login, user should be redirected to home and be logged in
+    await expect(leader).toHaveURL(`http://localhost:${PORT}/`);
+    await expect(leader.locator(".avatar")).toBeVisible();
+
+    // Test invalid login
+    await follower.goto(`http://localhost:${PORT}/login`);
+    await follower.getByPlaceholder("Enter your username").fill(testUsername);
+    await follower.getByPlaceholder("Enter your password").fill(
+      "wrongpassword",
+    );
+    await follower.getByRole("button", { name: "Login" }).click();
+
+    // Should show error message and stay on login page
+    await expect(follower.locator(".alert-error")).toBeVisible();
+    await expect(follower).toHaveURL(`http://localhost:${PORT}/login`);
+
+    // Test anonymous board creation
+    await follower.goto(loggedInBoardUrl);
+    await expect(follower.getByPlaceholder("I'm glad that...")).toBeVisible();
+  }, 20_000);
 });

@@ -1,16 +1,35 @@
 import { useCallback } from "preact/hooks";
 import { Nav } from "./components/nav";
-import PocketBase from "pocketbase";
 import { useLocation } from "preact-iso";
+import { pb, useAuth } from "./services/auth";
+
+type BoardData = {
+  created_by?: string;
+};
 
 function Home({}: { path?: string }) {
   const location = useLocation();
+  const auth = useAuth();
 
   const onClick = useCallback(async () => {
-    const client = new PocketBase();
-    const record = await client.collection("boards").create({});
-    location.route(`/retros/${record.id}`, true);
-  }, []);
+    // Create a board record with or without user ID
+    const data: BoardData = {};
+
+    // If user is logged in, attach their user ID to the retrospective
+    if (auth.isLoggedIn && auth.user) {
+      data.created_by = auth.user.id;
+    }
+
+    try {
+      const record = await pb.collection("boards").create(data);
+      location.route(`/retros/${record.id}`, true);
+    } catch (error) {
+      console.error("Error creating board:", error);
+      // If there's an error, create an anonymous board as fallback
+      const record = await pb.collection("boards").create({});
+      location.route(`/retros/${record.id}`, true);
+    }
+  }, [auth.isLoggedIn, auth.user]);
 
   return (
     <>

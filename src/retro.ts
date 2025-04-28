@@ -1,6 +1,7 @@
 import PocketBase, { type RecordModel } from "pocketbase";
 import { createContext } from "preact";
 import { useContext, useEffect, useState } from "preact/hooks";
+import { pb } from "./services/auth";
 
 export const RetroContext = createContext<Retro | null>(null);
 export function useRetro() {
@@ -14,7 +15,8 @@ class Retro {
   constructor(id: string) {
     this.id = id;
 
-    this.client = new PocketBase();
+    // Use the shared PocketBase instance
+    this.client = pb;
     this.client.autoCancellation(false);
   }
 

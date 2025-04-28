@@ -24,9 +24,9 @@ function Nav({ children }: { children?: JSX.Element | JSX.Element[] }) {
             <div class="dropdown dropdown-end">
               <label
                 tabIndex={0}
-                class="btn btn-ghost btn-circle avatar placeholder"
+                class="btn btn-ghost btn-circle avatar avatar-placeholder"
               >
-                <div class="bg-neutral text-neutral-content rounded-full w-10">
+                <div class="bg-neutral text-neutral-content rounded-full items-center justify-center w-10">
                   <span>
                     {auth.user?.username?.charAt(0).toUpperCase() || "?"}
                   </span>
@@ -36,11 +36,9 @@ function Nav({ children }: { children?: JSX.Element | JSX.Element[] }) {
                 tabIndex={0}
                 class="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52"
               >
-                <li class="text-sm opacity-70 px-4 py-2">
-                  Signed in as{" "}
-                  <span class="font-semibold">{auth.user?.username}</span>
+                <li>
+                  <a href="/profile">Profile</a>
                 </li>
-                <li class="divider"></li>
                 <li>
                   <a
                     href="/"

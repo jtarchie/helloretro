@@ -6,6 +6,7 @@ import { Home } from "./home";
 import { Help } from "./help";
 import { Login } from "./login";
 import { SignupPage } from "./signup";
+import { Profile } from "./profile";
 import { AuthProvider } from "./services/auth";
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
           <Help path="/help" />
           <Login path="/login" />
           <SignupPage path="/signup" />
+          <Profile path="/profile" />
         </Router>
 
         <footer class="footer sm:footer-horizontal p-10 bg-base-300 text-base-content">

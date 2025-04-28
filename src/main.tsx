@@ -1,12 +1,12 @@
 import { render } from "preact";
 import "./index.css";
 import { Board } from "./board";
-import Router from "preact-router";
+import { LocationProvider, Router } from "preact-iso";
 import { Home } from "./home";
 
 function App() {
   return (
-    <>
+    <LocationProvider>
       <Router>
         <Home path="/" />
         <Board path="/retros/:id" />
@@ -65,13 +65,17 @@ function App() {
           </p>
           <p>
             Copyright © 2024 -&nbsp;
-            <a href="https://jtarchie.com" class="link link-hover" data-native>
+            <a
+              href="https://jtarchie.com"
+              class="link link-hover"
+              data-native
+            >
               JT Archie
             </a>
           </p>
         </aside>
       </footer>
-    </>
+    </LocationProvider>
   );
 }
 

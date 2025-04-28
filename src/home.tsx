@@ -1,6 +1,17 @@
+import { useCallback } from "preact/hooks";
 import { Nav } from "./components/nav";
+import PocketBase from "pocketbase";
+import { useLocation } from "preact-iso";
 
 function Home({}: { path?: string }) {
+  const location = useLocation();
+
+  const onClick = useCallback(async () => {
+    const client = new PocketBase();
+    const record = await client.collection("boards").create({});
+    location.route(`/retros/${record.id}`, true);
+  }, []);
+
   return (
     <>
       <Nav />
@@ -21,9 +32,13 @@ function Home({}: { path?: string }) {
                 collaborative discussion, allowing team members to share their
                 thoughts and ideas on how to move forward.
               </p>
-              <a href="/retros/new" class="btn btn-primary btn-lg" data-native>
+              <button
+                type="button"
+                class="btn btn-primary btn-lg"
+                onClick={onClick}
+              >
                 Start your retro
-              </a>
+              </button>
             </div>
           </div>
         </div>

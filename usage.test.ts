@@ -78,9 +78,10 @@ describe("create and use a retro", () => {
   test("should work", async () => {
     await leader.goto(`http://localhost:${PORT}`);
 
-    const link = leader.getByRole("link", { name: /Start your retro/ });
+    const link = leader.getByRole("button", { name: /Start your retro/ });
     await expect(link).toBeVisible();
     await link.click();
+    await expect(leader.getByPlaceholder("I'm glad that...")).toBeVisible();
 
     await follower.goto(leader.url());
 

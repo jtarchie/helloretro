@@ -1335,6 +1335,16 @@ postcss@^8.4.41, postcss@^8.5.3:
     picocolors "^1.1.1"
     source-map-js "^1.2.1"
 
+preact-iso@^2.9.1:
+  version "2.9.1"
+  resolved "https://registry.yarnpkg.com/preact-iso/-/preact-iso-2.9.1.tgz#0f6b9ffc560fa7be0a367a7c396f4e88e9493b5e"
+  integrity sha512-65+oY5FHeSC3mjq2Dg6v72HYjsTYTqI9hXl1BK6vtUkxwfCqDJ5aqk33zjOH3aSuCY7duWiulyqMQ53GXpPIIQ==
+
+preact-render-to-string@^6.5.13:
+  version "6.5.13"
+  resolved "https://registry.yarnpkg.com/preact-render-to-string/-/preact-render-to-string-6.5.13.tgz#cb9eb4a0df3576e7bfd78ef5f3d3bd57480e79ee"
+  integrity sha512-iGPd+hKPMFKsfpR2vL4kJ6ZPcFIoWZEcBf0Dpm3zOpdVvj77aY8RlLiQji5OMrngEyaxGogeakTb54uS2FvA6w==
+
 preact-router@^4.1.2:
   version "4.1.2"
   resolved "https://registry.yarnpkg.com/preact-router/-/preact-router-4.1.2.tgz#f44b03737b670eeaec958563582eb8c4efaa87a5"

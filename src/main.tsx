@@ -3,6 +3,7 @@ import "./index.css";
 import { Board } from "./board";
 import { LocationProvider, Router } from "preact-iso";
 import { Home } from "./home";
+import { Help } from "./help";
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
       <Router>
         <Home path="/" />
         <Board path="/retros/:id" />
+        <Help path="/help" />
       </Router>
       <footer class="footer sm:footer-horizontal p-10 bg-base-300 text-base-content">
         <nav>
@@ -49,6 +51,14 @@ function App() {
           >
             Contact
           </a>
+          <a
+            class="link link-hover"
+            href="/help"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Help
+          </a>
         </nav>
       </footer>
       <footer class="footer footer-center px-10 py-4 border-t bg-base-200 text-base-content border-base-300">
@@ -63,6 +73,10 @@ function App() {
               />
             </a>
           </p>
+        </aside>
+      </footer>
+      <footer class="footer footer-center px-10 py-4 border-t bg-base-200 text-base-content border-base-300">
+        <aside>
           <p>
             Copyright © 2024 -&nbsp;
             <a

@@ -45,6 +45,9 @@ function Home({}: { path?: string }) {
               <h1 class="mb-5 text-5xl font-bold">
                 Reflect on your work
               </h1>
+              <h2 class="mb-5 text-2xl font-bold">
+                No sign up required!
+              </h2>
               <p class="mb-5">
                 HelloRetro is a tool that helps teams run retrospectives more
                 effectively. It's designed to foster open communication and

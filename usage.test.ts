@@ -169,8 +169,8 @@ describe("create and use a retro", () => {
     await leader.getByRole("button", { name: "Start your retro" }).click();
 
     // Get current board URL to verify later
-    const loggedInBoardUrl = leader.url();
     await expect(leader.getByPlaceholder("I'm glad that...")).toBeVisible();
+    const loggedInBoardUrl = leader.url();
 
     // Log out
     await leader.locator(".avatar").click();
@@ -204,6 +204,8 @@ describe("create and use a retro", () => {
 
     // Test anonymous board creation
     await follower.goto(loggedInBoardUrl);
+    console.log("Follower URL:", follower.url());
+    console.log("leader URL:", loggedInBoardUrl);
     await expect(follower.getByPlaceholder("I'm glad that...")).toBeVisible();
   }, 20_000);
 });

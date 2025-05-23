@@ -36,7 +36,9 @@ function Board({ id = "example" }: { path?: string; id?: string }) {
 
   const retro = new Retro(id);
   const checked = useSignal("happy");
-  const [sortByVotes, setSortByVotes] = useState(false); // New state for sorting
+  const [sortByVotes, setSortByVotes] = useState(false);
+  const [searchTerm, setSearchTerm] = useState(""); // New state for search
+  const [showSearch, setShowSearch] = useState(false); // Toggle search display
 
   const onShare = () => {
     navigator.clipboard.writeText(`${import.meta.env.BASE_URL}/retros/${id}`);
@@ -52,44 +54,107 @@ function Board({ id = "example" }: { path?: string; id?: string }) {
   return (
     <RetroContext.Provider value={retro}>
       <Nav>
-        <div class="dropdown">
-          <div tabIndex={0} role="button" class="btn btn-ghost btn-sm">
-            Sort by: {sortByVotes ? "Votes" : "Time"}
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              fill="currentColor"
-              class="ml-1"
-              viewBox="0 0 16 16"
-            >
-              <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
-            </svg>
-          </div>
-          <ul
-            tabIndex={0}
-            class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
-          >
-            <li>
+        {showSearch
+          ? (
+            <div class="flex items-center">
+              <input
+                type="text"
+                value={searchTerm}
+                onInput={(e) => setSearchTerm(e.currentTarget.value)}
+                placeholder="Search..."
+                class="input input-sm w-48 mr-2"
+                autoFocus
+              />
               <button
                 type="button"
-                onClick={() => setSortByVotes(false)}
-                aria-selected={!sortByVotes}
+                class="btn btn-ghost btn-sm"
+                onClick={() => {
+                  setShowSearch(false);
+                  setSearchTerm("");
+                }}
+                aria-label="Clear search"
               >
-                Sort by time
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="size-5"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M6 18 18 6M6 6l12 12"
+                  />
+                </svg>
               </button>
-            </li>
-            <li>
+            </div>
+          )
+          : (
+            <>
               <button
                 type="button"
-                onClick={() => setSortByVotes(true)}
-                aria-selected={sortByVotes}
+                class="btn btn-ghost btn-sm tooltip tooltip-bottom hidden sm:inline-block"
+                data-tip="Search"
+                aria-label="Search"
+                onClick={() => setShowSearch(true)}
               >
-                Sort by votes
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="size-6"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+                  />
+                </svg>
               </button>
-            </li>
-          </ul>
-        </div>
+              <div class="dropdown">
+                <div tabIndex={0} role="button" class="btn btn-ghost btn-sm">
+                  Sort by: {sortByVotes ? "Votes" : "Time"}
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    class="ml-1"
+                    viewBox="0 0 16 16"
+                  >
+                    <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
+                  </svg>
+                </div>
+                <ul
+                  tabIndex={0}
+                  class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
+                >
+                  <li>
+                    <button
+                      type="button"
+                      onClick={() => setSortByVotes(false)}
+                      aria-selected={!sortByVotes}
+                    >
+                      Sort by time
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      type="button"
+                      onClick={() => setSortByVotes(true)}
+                      aria-selected={sortByVotes}
+                    >
+                      Sort by votes
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            </>
+          )}
         <button
           type="button"
           class="btn btn-ghost btn-sm tooltip tooltip-bottom hidden sm:inline-block"
@@ -163,7 +228,8 @@ function Board({ id = "example" }: { path?: string; id?: string }) {
                   category={column.type}
                   emoji={column.emoji}
                   prompt={column.prompt}
-                  sortByVotes={sortByVotes} // Pass the sorting state
+                  sortByVotes={sortByVotes}
+                  searchTerm={searchTerm}
                 />
               );
             })}
@@ -184,6 +250,7 @@ function Board({ id = "example" }: { path?: string; id?: string }) {
                 emoji={column.emoji}
                 prompt={column.prompt}
                 sortByVotes={sortByVotes}
+                searchTerm={searchTerm}
               />
             );
           })}

@@ -11,6 +11,7 @@ function Tab(
     checked,
     bg: [bgPanel, bgText, bgPlaceholder],
     sortByVotes,
+    searchTerm = "",
   }: {
     category: string;
     emoji: string;
@@ -18,6 +19,7 @@ function Tab(
     checked: Signal<string>;
     bg: string[];
     sortByVotes: boolean;
+    searchTerm?: string;
   },
 ) {
   const retro = useRetro();
@@ -34,12 +36,23 @@ function Tab(
   const [sortedItems, setSortedItems] = useState(items);
 
   useEffect(() => {
-    if (sortByVotes) {
-      setSortedItems(items?.concat().sort((a, b) => b.votes - a.votes));
-    } else {
-      setSortedItems(items);
+    let filtered = items;
+
+    // Filter by search term if provided
+    if (searchTerm && searchTerm.trim() !== "") {
+      const lowerSearchTerm = searchTerm.toLowerCase();
+      filtered = items?.filter((item) =>
+        item.description.toLowerCase().includes(lowerSearchTerm)
+      );
     }
-  }, [items, sortByVotes]);
+
+    // Sort the filtered items
+    if (sortByVotes) {
+      setSortedItems(filtered?.concat().sort((a, b) => b.votes - a.votes));
+    } else {
+      setSortedItems(filtered);
+    }
+  }, [items, sortByVotes, searchTerm]);
 
   return (
     <>

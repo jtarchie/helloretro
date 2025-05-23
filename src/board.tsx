@@ -85,6 +85,12 @@ function Board({ id = "example" }: { path?: string; id?: string }) {
                 type="text"
                 value={searchTerm}
                 onInput={(e) => setSearchTerm(e.currentTarget.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Escape") {
+                    setShowSearch(false);
+                    setSearchTerm("");
+                  }
+                }}
                 placeholder="Search..."
                 class="input input-sm w-48 mr-2"
                 autoFocus

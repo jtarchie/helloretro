@@ -16,9 +16,12 @@ function Nav({ children }: { children?: JSX.Element | JSX.Element[] }) {
           HelloRetro
         </a>
       </div>
-      <div class="flex-none gap-4">
-        {children}
 
+      {/* Children content (if any) */}
+      {children && <div class="flex-none">{children}</div>}
+
+      {/* Account section - always right-aligned */}
+      <div class="flex-none ml-auto">
         {auth.isLoggedIn
           ? (
             <div class="dropdown dropdown-end">

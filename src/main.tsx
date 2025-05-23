@@ -87,7 +87,7 @@ function App() {
         <footer class="footer footer-center px-10 py-4 border-t bg-base-200 text-base-content border-base-300">
           <aside>
             <p>
-              Copyright © 2024 -&nbsp;
+              Copyright © {new Date().getFullYear()} -&nbsp;
               <a
                 href="https://jtarchie.com"
                 class="link link-hover"

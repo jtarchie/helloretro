@@ -19,66 +19,42 @@ function ViewItem(
   return (
     <div
       class={`bg-white p-2 rounded shadow flex items-center justify-between relative ${
-        item.completed && "cursor-not-allowed"
+        item.completed && "opacity-70 cursor-not-allowed"
       }`}
     >
       <div class="flex items-center">
-        <div
-          class="absolute bottom-1 right-1"
-          role="status"
-          aria-live="polite"
-        >
-          {item.completed
-            ? (
-              <div
-                class="text-gray-500"
-                aria-label="Item completed and locked"
-                title="This item has been completed and can no longer be discussed"
+        {!item.completed && (
+          <div
+            class="absolute bottom-1 right-1"
+            role="status"
+            aria-live="polite"
+          >
+            <button
+              type="button"
+              class="flex items-center p-1 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
+              aria-label="Start discussing this item"
+              title="Click to begin discussing this item"
+              onClick={() => setActive()}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                class="w-4 h-4 text-blue-500"
+                aria-hidden="true"
+                role="img"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                  class="w-4 h-4"
-                  aria-hidden="true"
-                  role="img"
-                >
-                  <title>Locked - Item Completed</title>
-                  <path
-                    fill-rule="evenodd"
-                    d="M10 1a4.5 4.5 0 0 0-4.5 4.5V9H5a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2h-.5V5.5A4.5 4.5 0 0 0 10 1Zm3 8V5.5a3 3 0 1 0-6 0V9h6Z"
-                    clip-rule="evenodd"
-                  />
-                </svg>
-              </div>
-            )
-            : (
-              <button
-                type="button"
-                class="flex items-center p-1 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
-                aria-label="Start discussing this item"
-                title="Click to begin discussing this item"
-                onClick={() => setActive()}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                  class="w-4 h-4 text-blue-500"
-                  aria-hidden="true"
-                  role="img"
-                >
-                  <title>Start Discussion</title>
-                  <path
-                    fill-rule="evenodd"
-                    d="M3.43 2.524A41.29 41.29 0 0 1 10 2c2.236 0 4.43.18 6.57.524 1.437.231 2.43 1.49 2.43 2.902v5.148c0 1.413-.993 2.67-2.43 2.902a41.202 41.202 0 0 1-5.183.501.78.78 0 0 0-.528.224l-3.579 3.58A.75.75 0 0 1 6 17.25v-3.443a41.033 41.033 0 0 1-2.57-.33C1.993 13.244 1 11.986 1 10.573V5.426c0-1.413.993-2.67 2.43-2.902Z"
-                    clip-rule="evenodd"
-                  />
-                </svg>
-                <span class="sr-only">Start discussing this item</span>
-              </button>
-            )}
-        </div>
+                <title>Start Discussion</title>
+                <path
+                  fill-rule="evenodd"
+                  d="M3.43 2.524A41.29 41.29 0 0 1 10 2c2.236 0 4.43.18 6.57.524 1.437.231 2.43 1.49 2.43 2.902v5.148c0 1.413-.993 2.67-2.43 2.902a41.202 41.202 0 0 1-5.183.501.78.78 0 0 0-.528.224l-3.579 3.58A.75.75 0 0 1 6 17.25v-3.443a41.033 41.033 0 0 1-2.57-.33C1.993 13.244 1 11.986 1 10.573V5.426c0-1.413.993-2.67 2.43-2.902Z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+              <span class="sr-only">Start discussing this item</span>
+            </button>
+          </div>
+        )}
         <button
           type="button"
           class={`flex flex-col items-center ${

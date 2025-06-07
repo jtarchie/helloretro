@@ -26,42 +26,51 @@ class Retro {
     // subscribe to the latest items
     useEffect(
       (async () => {
-        this.client.collection("items").getFullList({
-          sort: "created",
-          filter: this.client.filter(
-            "board_id={:board_id} && category={:category}",
-            { board_id: this.id, category: category },
-          ),
-        }).then((results) => {
-          setItems(results);
-        });
-
-        const unsubscribe = await this.client.collection("items").subscribe(
-          "*",
-          (event) => {
-            if (event.action === "create") {
-              setItems((prevItems) => [...prevItems, event.record]);
-            } else if (event.action === "update") {
-              setItems((prevItems) =>
-                prevItems.map((
-                  item,
-                ) => (item.id === event.record.id ? event.record : item))
-              );
-            } else if (event.action === "delete") {
-              setItems((prevItems) =>
-                prevItems.filter((item) => item.id !== event.record.id)
-              );
-            }
-          },
-          {
-            filter: this.client.filter(
-              "board_id={:board_id} && category={:category}",
-              { board_id: this.id, category: category },
-            ),
+        const unsubscribeConnect = await this.client.realtime.subscribe(
+          "PB_CONNECT",
+          () => {
+            this.client.collection("items").getFullList({
+              sort: "created",
+              filter: this.client.filter(
+                "board_id={:board_id} && category={:category}",
+                { board_id: this.id, category: category },
+              ),
+            }).then((results) => {
+              setItems(results);
+            });
           },
         );
 
-        return () => unsubscribe();
+        const unsubscribeItems = await this.client.collection("items")
+          .subscribe(
+            "*",
+            (event) => {
+              if (event.action === "create") {
+                setItems((prevItems) => [...prevItems, event.record]);
+              } else if (event.action === "update") {
+                setItems((prevItems) =>
+                  prevItems.map((
+                    item,
+                  ) => (item.id === event.record.id ? event.record : item))
+                );
+              } else if (event.action === "delete") {
+                setItems((prevItems) =>
+                  prevItems.filter((item) => item.id !== event.record.id)
+                );
+              }
+            },
+            {
+              filter: this.client.filter(
+                "board_id={:board_id} && category={:category}",
+                { board_id: this.id, category: category },
+              ),
+            },
+          );
+
+        return () => {
+          unsubscribeItems();
+          unsubscribeConnect();
+        };
       }) as () => void,
       [],
     );

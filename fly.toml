@@ -10,7 +10,7 @@ primary_region = 'sjc'
 dockerfile = "Dockerfile"
 
 [build.args]
-PB_VERSION = "0.28.1"
+PB_VERSION = "0.28.2"
 
 [http_service]
 internal_port = 8080
@@ -29,7 +29,7 @@ timeout = "5s"
 path = "/api/health"
 
 [[vm]]
-memory = '512mb'
+memory = '256mb'
 cpu_kind = 'shared'
 cpus = 1
 

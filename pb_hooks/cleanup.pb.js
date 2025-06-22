@@ -2,7 +2,7 @@
 
 cronAdd("cleanup unused boards", "0 0 * * 0", () => {
   const ago = new Date(
-    new Date().getTime() - (7 * 24 * 60 * 60 * 1000),
+    new Date().getTime() - (3 * 31 * 24 * 60 * 60 * 1000),
   );
 
   const boards = $app.findRecordsByFilter(
@@ -11,22 +11,16 @@ cronAdd("cleanup unused boards", "0 0 * * 0", () => {
     "", // sort
     0, // limit
     0, // offset
-    { ago: ago.toISOString() }, // optional filter params
+    { ago: ago.toISOString().replace("T", " ") }, // optional filter params
   );
 
   boards.forEach((record) => {
-    const items = $app.findRecordsByFilter(
-      "items", // collection
-      "board_id = {:board_id}", // filter
-      "", // sort
-      1, // limit
-      0, // offset
-      { board_id: record.id }, // optional filter params
-    );
+    const createdBy = record.get("created_by");
 
-    if (items.length == 0) {
-      console.log("record", record.id, record.getCreated());
-      $app.delete(record);
+    if (createdBy) {
+      return; // skip if created by a user
     }
+
+    $app.delete(record);
   });
 });

@@ -4,7 +4,7 @@ import { Panel } from "./retros/panel";
 import { Signal, useSignal } from "@preact/signals";
 import { Tab } from "./retros/tab";
 import MediaQuery from "react-responsive";
-import { useState } from "preact/hooks";
+import { useState, useEffect } from "preact/hooks";
 
 // Component for the search functionality
 const SearchInput = ({
@@ -90,16 +90,65 @@ const SearchButton = (
   );
 };
 
-// Component for sorting options
+// Component for vote visibility toggle
+const VoteVisibilityToggle = (
+  { showVotes, setShowVotes }: {
+    showVotes: boolean;
+    setShowVotes: (value: boolean) => void;
+  },
+) => {
+  return (
+    <button
+      type="button"
+      class={`btn btn-ghost btn-sm tooltip tooltip-bottom ${showVotes ? 'text-blue-500' : 'text-gray-500'}`}
+      data-tip={showVotes ? "Hide Votes" : "Show Votes"}
+      aria-label={showVotes ? "Hide Votes" : "Show Votes"}
+      onClick={() => setShowVotes(!showVotes)}
+    >
+      {showVotes ? (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+          class="w-5 h-5"
+        >
+          <title>Eye Open</title>
+          <path d="M10 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" />
+          <path
+            fill-rule="evenodd"
+            d="M.664 10.59a1.651 1.651 0 0 1 0-1.186A10.004 10.004 0 0 1 10 3c4.257 0 7.893 2.66 9.336 6.41.147.381.147.804 0 1.186A10.004 10.004 0 0 1 10 17c-4.257 0-7.893-2.66-9.336-6.41ZM14 10a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z"
+            clip-rule="evenodd"
+          />
+        </svg>
+      ) : (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+          class="w-5 h-5"
+        >
+          <title>Eye Closed</title>
+          <path
+            fill-rule="evenodd"
+            d="M3.28 2.22a.75.75 0 0 0-1.06 1.06l14.5 14.5a.75.75 0 1 0 1.06-1.06l-1.745-1.745a10.029 10.029 0 0 0 3.3-4.38 1.651 1.651 0 0 0 0-1.185A10.004 10.004 0 0 0 9.999 3a9.956 9.956 0 0 0-4.744 1.194L3.28 2.22ZM7.752 6.69l1.092 1.092a2.5 2.5 0 0 1 3.374 3.373l1.091 1.092a4 4 0 0 0-5.557-5.557Z"
+            clip-rule="evenodd"
+          />
+          <path d="m10.748 13.93 2.523 2.523a9.987 9.987 0 0 1-3.27.547c-4.258 0-7.894-2.66-9.337-6.41a1.651 1.651 0 0 1 0-1.186A10.007 10.007 0 0 1 2.839 6.02L6.07 9.252a4 4 0 0 0 4.678 4.678Z" />
+        </svg>
+      )}
+    </button>
+  );
+};
 const SortOptions = (
-  { sortByVotes, setSortByVotes }: {
+  { sortByVotes, setSortByVotes, showVotes }: {
     sortByVotes: boolean;
     setSortByVotes: (value: boolean) => void;
+    showVotes: boolean;
   },
 ) => {
   return (
     <div class="dropdown">
-      <div tabIndex={0} role="button" class="btn btn-ghost btn-sm">
+      <div tabIndex={0} role="button" class={`btn btn-ghost btn-sm ${!showVotes ? 'btn-disabled' : ''}`}>
         Sort by: {sortByVotes ? "Votes" : "Time"}
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -112,29 +161,31 @@ const SortOptions = (
           <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
         </svg>
       </div>
-      <ul
-        tabIndex={0}
-        class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
-      >
-        <li>
-          <button
-            type="button"
-            onClick={() => setSortByVotes(false)}
-            aria-selected={!sortByVotes}
-          >
-            Sort by time
-          </button>
-        </li>
-        <li>
-          <button
-            type="button"
-            onClick={() => setSortByVotes(true)}
-            aria-selected={sortByVotes}
-          >
-            Sort by votes
-          </button>
-        </li>
-      </ul>
+      {showVotes && (
+        <ul
+          tabIndex={0}
+          class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
+        >
+          <li>
+            <button
+              type="button"
+              onClick={() => setSortByVotes(false)}
+              aria-selected={!sortByVotes}
+            >
+              Sort by time
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              onClick={() => setSortByVotes(true)}
+              aria-selected={sortByVotes}
+            >
+              Sort by votes
+            </button>
+          </li>
+        </ul>
+      )}
     </div>
   );
 };
@@ -227,6 +278,8 @@ const NavToolbar = ({
   setShowSearch,
   sortByVotes,
   setSortByVotes,
+  showVotes,
+  setShowVotes,
   id,
   onShare,
   confirmDelete,
@@ -237,6 +290,8 @@ const NavToolbar = ({
   setShowSearch: (value: boolean) => void;
   sortByVotes: boolean;
   setSortByVotes: (value: boolean) => void;
+  showVotes: boolean;
+  setShowVotes: (value: boolean) => void;
   id: string;
   onShare: () => void;
   confirmDelete: () => void;
@@ -252,7 +307,8 @@ const NavToolbar = ({
           />
         )
         : <SearchButton setShowSearch={setShowSearch} />}
-      <SortOptions sortByVotes={sortByVotes} setSortByVotes={setSortByVotes} />
+      <VoteVisibilityToggle showVotes={showVotes} setShowVotes={setShowVotes} />
+      <SortOptions sortByVotes={sortByVotes} setSortByVotes={setSortByVotes} showVotes={showVotes} />
       <ShareButton onShare={onShare} />
       <ExportButton id={id} />
       <DeleteButton confirmDelete={confirmDelete} />
@@ -265,6 +321,7 @@ const DesktopColumns = ({
   columns,
   sortByVotes,
   searchTerm,
+  showVotes,
 }: {
   columns: Array<{
     type: string;
@@ -274,6 +331,7 @@ const DesktopColumns = ({
   }>;
   sortByVotes: boolean;
   searchTerm: string;
+  showVotes: boolean;
 }) => {
   return (
     <div class="grow grid grid-cols-4 gap-4 p-4 md:h-full">
@@ -285,6 +343,7 @@ const DesktopColumns = ({
           prompt={column.prompt}
           sortByVotes={sortByVotes}
           searchTerm={searchTerm}
+          showVotes={showVotes}
         />
       ))}
     </div>
@@ -297,6 +356,7 @@ const MobileTabs = ({
   checked,
   sortByVotes,
   searchTerm,
+  showVotes,
 }: {
   columns: Array<{
     type: string;
@@ -307,6 +367,7 @@ const MobileTabs = ({
   checked: Signal<string>;
   sortByVotes: boolean;
   searchTerm: string;
+  showVotes: boolean;
 }) => {
   return (
     <div role="tablist" class="tabs tabs-box md:hidden">
@@ -319,6 +380,7 @@ const MobileTabs = ({
           prompt={column.prompt}
           sortByVotes={sortByVotes}
           searchTerm={searchTerm}
+          showVotes={showVotes}
         />
       ))}
     </div>
@@ -359,8 +421,16 @@ function Board({ id = "example" }: { path?: string; id?: string }) {
   const retro = new Retro(id);
   const checked = useSignal("happy");
   const [sortByVotes, setSortByVotes] = useState(false);
+  const [showVotes, setShowVotes] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [showSearch, setShowSearch] = useState(false);
+
+  // When votes are hidden, disable sorting by votes
+  useEffect(() => {
+    if (!showVotes && sortByVotes) {
+      setSortByVotes(false);
+    }
+  }, [showVotes, sortByVotes]);
 
   // Event handlers
   const onShare = () => {
@@ -383,6 +453,8 @@ function Board({ id = "example" }: { path?: string; id?: string }) {
         setShowSearch={setShowSearch}
         sortByVotes={sortByVotes}
         setSortByVotes={setSortByVotes}
+        showVotes={showVotes}
+        setShowVotes={setShowVotes}
         id={id}
         onShare={onShare}
         confirmDelete={confirmDelete}
@@ -394,6 +466,7 @@ function Board({ id = "example" }: { path?: string; id?: string }) {
             columns={columns}
             sortByVotes={sortByVotes}
             searchTerm={searchTerm}
+            showVotes={showVotes}
           />
         </div>
       </MediaQuery>
@@ -404,6 +477,7 @@ function Board({ id = "example" }: { path?: string; id?: string }) {
           checked={checked}
           sortByVotes={sortByVotes}
           searchTerm={searchTerm}
+          showVotes={showVotes}
         />
       </MediaQuery>
     </RetroContext.Provider>

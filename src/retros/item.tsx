@@ -5,7 +5,7 @@ import { ActiveItem } from "./items/active";
 import type { ItemStatus } from "./items/status";
 import { useEffect, useState } from "preact/hooks";
 
-function Item({ item }: { item: RecordModel }) {
+function Item({ item, showVotes }: { item: RecordModel; showVotes: boolean }) {
   const [state, setState] = useState<ItemStatus>("view");
 
   useEffect(() => {
@@ -32,7 +32,7 @@ function Item({ item }: { item: RecordModel }) {
     default:
       return (
         <li>
-          <ViewItem item={item} setState={setState} />
+          <ViewItem item={item} setState={setState} showVotes={showVotes} />
         </li>
       );
   }

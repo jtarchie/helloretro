@@ -12,6 +12,7 @@ function Tab(
     bg: [bgPanel, bgText, bgPlaceholder],
     sortByVotes,
     searchTerm = "",
+    showVotes,
   }: {
     category: string;
     emoji: string;
@@ -20,6 +21,7 @@ function Tab(
     bg: string[];
     sortByVotes: boolean;
     searchTerm?: string;
+    showVotes: boolean;
   },
 ) {
   const retro = useRetro();
@@ -82,7 +84,7 @@ function Tab(
         </form>
         <ol class="space-y-2">
           {sortedItems?.map((item) => {
-            return <Item key={item.id} item={item} />;
+            return <Item key={item.id} item={item} showVotes={showVotes} />;
           })}
         </ol>
       </div>

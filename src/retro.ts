@@ -20,6 +20,51 @@ class Retro {
     this.client.autoCancellation(false);
   }
 
+  useBoard() {
+    const [board, setBoard] = useState<RecordModel | null>(null);
+
+    useEffect(() => {
+      let unsubscribe: () => Promise<void>;
+
+      // Initial load
+      this.client.collection("boards").getOne(this.id)
+        .then(setBoard)
+        .catch(() => {
+          // Board doesn't exist, create it
+          this.client.collection("boards").create({
+            id: this.id,
+            votes_hidden: false,
+          }).then(setBoard);
+        });
+
+      // Subscribe to board changes
+      this.client.collection("boards").subscribe(
+        this.id,
+        (event) => {
+          if (event.action === "update") {
+            setBoard(event.record);
+          }
+        },
+      ).then((unsub) => {
+        unsubscribe = unsub;
+      });
+
+      return () => {
+        if (unsubscribe) {
+          unsubscribe().catch(() => {});
+        }
+      };
+    }, []);
+
+    return board;
+  }
+
+  async setVotesHidden(hidden: boolean) {
+    await this.client.collection("boards").update(this.id, {
+      votes_hidden: hidden,
+    });
+  }
+
   useItems(category: string) {
     const [items, setItems] = useState<RecordModel[]>([]);
 

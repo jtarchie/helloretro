@@ -5,6 +5,7 @@ import { Signal, useSignal } from "@preact/signals";
 import { Tab } from "./retros/tab";
 import MediaQuery from "react-responsive";
 import { useState, useEffect } from "preact/hooks";
+import type { RecordModel } from "pocketbase";
 
 // Component for the search functionality
 const SearchInput = ({
@@ -92,18 +93,24 @@ const SearchButton = (
 
 // Component for vote visibility toggle
 const VoteVisibilityToggle = (
-  { showVotes, setShowVotes }: {
-    showVotes: boolean;
-    setShowVotes: (value: boolean) => void;
+  { board, retro }: {
+    board: RecordModel | null;
+    retro: Retro;
   },
 ) => {
+  const showVotes = !board?.votes_hidden;
+  
+  const toggleVotes = async () => {
+    await retro.setVotesHidden(!board?.votes_hidden);
+  };
+
   return (
     <button
       type="button"
       class={`btn btn-ghost btn-sm tooltip tooltip-bottom ${showVotes ? 'text-blue-500' : 'text-gray-500'}`}
       data-tip={showVotes ? "Hide Votes" : "Show Votes"}
       aria-label={showVotes ? "Hide Votes" : "Show Votes"}
-      onClick={() => setShowVotes(!showVotes)}
+      onClick={toggleVotes}
     >
       {showVotes ? (
         <svg
@@ -140,12 +147,14 @@ const VoteVisibilityToggle = (
   );
 };
 const SortOptions = (
-  { sortByVotes, setSortByVotes, showVotes }: {
+  { sortByVotes, setSortByVotes, board }: {
     sortByVotes: boolean;
     setSortByVotes: (value: boolean) => void;
-    showVotes: boolean;
+    board: RecordModel | null;
   },
 ) => {
+  const showVotes = !board?.votes_hidden;
+  
   return (
     <div class="dropdown">
       <div tabIndex={0} role="button" class={`btn btn-ghost btn-sm ${!showVotes ? 'btn-disabled' : ''}`}>
@@ -278,8 +287,8 @@ const NavToolbar = ({
   setShowSearch,
   sortByVotes,
   setSortByVotes,
-  showVotes,
-  setShowVotes,
+  board,
+  retro,
   id,
   onShare,
   confirmDelete,
@@ -290,8 +299,8 @@ const NavToolbar = ({
   setShowSearch: (value: boolean) => void;
   sortByVotes: boolean;
   setSortByVotes: (value: boolean) => void;
-  showVotes: boolean;
-  setShowVotes: (value: boolean) => void;
+  board: RecordModel | null;
+  retro: Retro;
   id: string;
   onShare: () => void;
   confirmDelete: () => void;
@@ -307,8 +316,8 @@ const NavToolbar = ({
           />
         )
         : <SearchButton setShowSearch={setShowSearch} />}
-      <VoteVisibilityToggle showVotes={showVotes} setShowVotes={setShowVotes} />
-      <SortOptions sortByVotes={sortByVotes} setSortByVotes={setSortByVotes} showVotes={showVotes} />
+      <VoteVisibilityToggle board={board} retro={retro} />
+      <SortOptions sortByVotes={sortByVotes} setSortByVotes={setSortByVotes} board={board} />
       <ShareButton onShare={onShare} />
       <ExportButton id={id} />
       <DeleteButton confirmDelete={confirmDelete} />
@@ -419,11 +428,13 @@ function Board({ id = "example" }: { path?: string; id?: string }) {
 
   // State management
   const retro = new Retro(id);
+  const board = retro.useBoard();
   const checked = useSignal("happy");
   const [sortByVotes, setSortByVotes] = useState(false);
-  const [showVotes, setShowVotes] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [showSearch, setShowSearch] = useState(false);
+
+  const showVotes = !board?.votes_hidden;
 
   // When votes are hidden, disable sorting by votes
   useEffect(() => {
@@ -453,8 +464,8 @@ function Board({ id = "example" }: { path?: string; id?: string }) {
         setShowSearch={setShowSearch}
         sortByVotes={sortByVotes}
         setSortByVotes={setSortByVotes}
-        showVotes={showVotes}
-        setShowVotes={setShowVotes}
+        board={board}
+        retro={retro}
         id={id}
         onShare={onShare}
         confirmDelete={confirmDelete}

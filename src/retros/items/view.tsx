@@ -61,7 +61,7 @@ function ViewItem(
     if (showVotes) {
       return item.votes; // Show actual count when votes are visible
     } else {
-      return hasVoted ? item.votes : "?"; // Show count only if user voted, otherwise "?"
+      return hasVoted ? "1" : "?"; // Show "1" if user voted, otherwise "?"
     }
   };
 

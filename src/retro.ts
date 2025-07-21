@@ -33,7 +33,6 @@ class Retro {
           // Board doesn't exist, create it
           this.client.collection("boards").create({
             id: this.id,
-            votes_hidden: false,
           }).then(setBoard);
         });
 
@@ -57,12 +56,6 @@ class Retro {
     }, []);
 
     return board;
-  }
-
-  async setVotesHidden(hidden: boolean) {
-    await this.client.collection("boards").update(this.id, {
-      votes_hidden: hidden,
-    });
   }
 
   useItems(category: string) {

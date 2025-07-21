@@ -12,6 +12,8 @@ function Panel(
     sortByVotes,
     searchTerm = "",
     showVotes,
+    userVotes,
+    boardId,
   }: {
     category: string;
     emoji: string;
@@ -20,6 +22,8 @@ function Panel(
     sortByVotes: boolean;
     searchTerm?: string;
     showVotes: boolean;
+    userVotes: Set<string>;
+    boardId: string;
   },
 ) {
   const retro = useRetro();
@@ -75,7 +79,7 @@ function Panel(
       </form>
       <ol class="space-y-2">
         {sortedItems?.map((item) => {
-          return <Item key={item.id} item={item} showVotes={showVotes} />;
+          return <Item key={item.id} item={item} showVotes={showVotes} userVotes={userVotes} boardId={boardId} />;
         })}
       </ol>
     </div>

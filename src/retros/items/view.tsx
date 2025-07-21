@@ -2,19 +2,67 @@ import { useRetro } from "../../retro";
 import type { RecordModel } from "pocketbase";
 import { SimpleFormat } from "../../simple_format";
 import type { ItemStatus } from "./status";
+import { useState } from "preact/hooks";
+
+// Import helper functions from board.tsx
+const getUserVotesKey = (boardId: string) => `user-votes-${boardId}`;
+
+const getUserVotes = (boardId: string): Set<string> => {
+  try {
+    const stored = localStorage.getItem(getUserVotesKey(boardId));
+    return stored ? new Set(JSON.parse(stored)) : new Set();
+  } catch {
+    return new Set();
+  }
+};
+
+const setUserVotes = (boardId: string, votes: Set<string>) => {
+  try {
+    localStorage.setItem(getUserVotesKey(boardId), JSON.stringify([...votes]));
+  } catch {
+    // If localStorage fails, continue without persisting
+  }
+};
+
+const addUserVote = (boardId: string, itemId: string) => {
+  const votes = getUserVotes(boardId);
+  votes.add(itemId);
+  setUserVotes(boardId, votes);
+  return votes;
+};
 
 function ViewItem(
-  { item, setState, showVotes }: {
+  { item, setState, showVotes, userVotes, boardId }: {
     item: RecordModel;
     setState: (value: ItemStatus) => void;
     showVotes: boolean;
+    userVotes: Set<string>;
+    boardId: string;
   },
 ) {
   const retro = useRetro();
-  const upvote = async () => await retro?.vote(item.id, 1);
+  const [localUserVotes, setLocalUserVotes] = useState<Set<string>>(userVotes);
+  
+  const hasVoted = localUserVotes.has(item.id);
+  
+  const upvote = async () => {
+    await retro?.vote(item.id, 1);
+    const updatedVotes = addUserVote(boardId, item.id);
+    setLocalUserVotes(new Set(updatedVotes));
+  };
+  
   const setActive = async () => {
     await retro?.setActiveItem(item.id);
     setState("active");
+  };
+
+  // Determine what vote count to display
+  const displayVoteCount = () => {
+    if (showVotes) {
+      return item.votes; // Show actual count when votes are visible
+    } else {
+      return hasVoted ? item.votes : "?"; // Show count only if user voted, otherwise "?"
+    }
   };
 
   return (
@@ -77,7 +125,7 @@ function ViewItem(
             </svg>
           </span>
           <span class="text-red-500 mr-2">
-            {showVotes ? item.votes : "?"}
+            {displayVoteCount()}
           </span>
         </button>
 

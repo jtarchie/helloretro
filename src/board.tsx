@@ -5,7 +5,18 @@ import { Signal, useSignal } from "@preact/signals";
 import { Tab } from "./retros/tab";
 import MediaQuery from "react-responsive";
 import { useState, useEffect } from "preact/hooks";
-import type { RecordModel } from "pocketbase";
+
+// Utility functions for tracking user votes
+const getUserVotesKey = (boardId: string) => `user-votes-${boardId}`;
+
+const getUserVotes = (boardId: string): Set<string> => {
+  try {
+    const stored = localStorage.getItem(getUserVotesKey(boardId));
+    return stored ? new Set(JSON.parse(stored)) : new Set();
+  } catch {
+    return new Set();
+  }
+};
 
 // Component for the search functionality
 const SearchInput = ({
@@ -93,24 +104,18 @@ const SearchButton = (
 
 // Component for vote visibility toggle
 const VoteVisibilityToggle = (
-  { board, retro }: {
-    board: RecordModel | null;
-    retro: Retro;
+  { showVotes, setShowVotes }: {
+    showVotes: boolean;
+    setShowVotes: (value: boolean) => void;
   },
 ) => {
-  const showVotes = !board?.votes_hidden;
-  
-  const toggleVotes = async () => {
-    await retro.setVotesHidden(!board?.votes_hidden);
-  };
-
   return (
     <button
       type="button"
       class={`btn btn-ghost btn-sm tooltip tooltip-bottom ${showVotes ? 'text-blue-500' : 'text-gray-500'}`}
       data-tip={showVotes ? "Hide Votes" : "Show Votes"}
       aria-label={showVotes ? "Hide Votes" : "Show Votes"}
-      onClick={toggleVotes}
+      onClick={() => setShowVotes(!showVotes)}
     >
       {showVotes ? (
         <svg
@@ -147,14 +152,12 @@ const VoteVisibilityToggle = (
   );
 };
 const SortOptions = (
-  { sortByVotes, setSortByVotes, board }: {
+  { sortByVotes, setSortByVotes, showVotes }: {
     sortByVotes: boolean;
     setSortByVotes: (value: boolean) => void;
-    board: RecordModel | null;
+    showVotes: boolean;
   },
 ) => {
-  const showVotes = !board?.votes_hidden;
-  
   return (
     <div class="dropdown">
       <div tabIndex={0} role="button" class={`btn btn-ghost btn-sm ${!showVotes ? 'btn-disabled' : ''}`}>
@@ -287,8 +290,8 @@ const NavToolbar = ({
   setShowSearch,
   sortByVotes,
   setSortByVotes,
-  board,
-  retro,
+  showVotes,
+  setShowVotes,
   id,
   onShare,
   confirmDelete,
@@ -299,8 +302,8 @@ const NavToolbar = ({
   setShowSearch: (value: boolean) => void;
   sortByVotes: boolean;
   setSortByVotes: (value: boolean) => void;
-  board: RecordModel | null;
-  retro: Retro;
+  showVotes: boolean;
+  setShowVotes: (value: boolean) => void;
   id: string;
   onShare: () => void;
   confirmDelete: () => void;
@@ -316,8 +319,8 @@ const NavToolbar = ({
           />
         )
         : <SearchButton setShowSearch={setShowSearch} />}
-      <VoteVisibilityToggle board={board} retro={retro} />
-      <SortOptions sortByVotes={sortByVotes} setSortByVotes={setSortByVotes} board={board} />
+      <VoteVisibilityToggle showVotes={showVotes} setShowVotes={setShowVotes} />
+      <SortOptions sortByVotes={sortByVotes} setSortByVotes={setSortByVotes} showVotes={showVotes} />
       <ShareButton onShare={onShare} />
       <ExportButton id={id} />
       <DeleteButton confirmDelete={confirmDelete} />
@@ -331,6 +334,8 @@ const DesktopColumns = ({
   sortByVotes,
   searchTerm,
   showVotes,
+  userVotes,
+  boardId,
 }: {
   columns: Array<{
     type: string;
@@ -341,6 +346,8 @@ const DesktopColumns = ({
   sortByVotes: boolean;
   searchTerm: string;
   showVotes: boolean;
+  userVotes: Set<string>;
+  boardId: string;
 }) => {
   return (
     <div class="grow grid grid-cols-4 gap-4 p-4 md:h-full">
@@ -353,6 +360,8 @@ const DesktopColumns = ({
           sortByVotes={sortByVotes}
           searchTerm={searchTerm}
           showVotes={showVotes}
+          userVotes={userVotes}
+          boardId={boardId}
         />
       ))}
     </div>
@@ -366,6 +375,8 @@ const MobileTabs = ({
   sortByVotes,
   searchTerm,
   showVotes,
+  userVotes,
+  boardId,
 }: {
   columns: Array<{
     type: string;
@@ -377,6 +388,8 @@ const MobileTabs = ({
   sortByVotes: boolean;
   searchTerm: string;
   showVotes: boolean;
+  userVotes: Set<string>;
+  boardId: string;
 }) => {
   return (
     <div role="tablist" class="tabs tabs-box md:hidden">
@@ -390,6 +403,8 @@ const MobileTabs = ({
           sortByVotes={sortByVotes}
           searchTerm={searchTerm}
           showVotes={showVotes}
+          userVotes={userVotes}
+          boardId={boardId}
         />
       ))}
     </div>
@@ -428,13 +443,17 @@ function Board({ id = "example" }: { path?: string; id?: string }) {
 
   // State management
   const retro = new Retro(id);
-  const board = retro.useBoard();
   const checked = useSignal("happy");
   const [sortByVotes, setSortByVotes] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [showSearch, setShowSearch] = useState(false);
+  const [showVotes, setShowVotes] = useState(true); // Local state for vote visibility
+  const [userVotes, setUserVotes] = useState<Set<string>>(new Set());
 
-  const showVotes = !board?.votes_hidden;
+  // Initialize user votes from localStorage
+  useEffect(() => {
+    setUserVotes(getUserVotes(id));
+  }, [id]);
 
   // When votes are hidden, disable sorting by votes
   useEffect(() => {
@@ -464,8 +483,8 @@ function Board({ id = "example" }: { path?: string; id?: string }) {
         setShowSearch={setShowSearch}
         sortByVotes={sortByVotes}
         setSortByVotes={setSortByVotes}
-        board={board}
-        retro={retro}
+        showVotes={showVotes}
+        setShowVotes={setShowVotes}
         id={id}
         onShare={onShare}
         confirmDelete={confirmDelete}
@@ -478,6 +497,8 @@ function Board({ id = "example" }: { path?: string; id?: string }) {
             sortByVotes={sortByVotes}
             searchTerm={searchTerm}
             showVotes={showVotes}
+            userVotes={userVotes}
+            boardId={id}
           />
         </div>
       </MediaQuery>
@@ -489,6 +510,8 @@ function Board({ id = "example" }: { path?: string; id?: string }) {
           sortByVotes={sortByVotes}
           searchTerm={searchTerm}
           showVotes={showVotes}
+          userVotes={userVotes}
+          boardId={id}
         />
       </MediaQuery>
     </RetroContext.Provider>

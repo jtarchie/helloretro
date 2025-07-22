@@ -4,7 +4,7 @@ import { Panel } from "./retros/panel";
 import { Signal, useSignal } from "@preact/signals";
 import { Tab } from "./retros/tab";
 import MediaQuery from "react-responsive";
-import { useState, useEffect } from "preact/hooks";
+import { useEffect, useState } from "preact/hooks";
 import type { RecordModel } from "pocketbase";
 
 // Component for the search functionality
@@ -99,7 +99,7 @@ const VoteVisibilityToggle = (
   },
 ) => {
   const showVotes = !board?.votes_hidden;
-  
+
   const toggleVotes = async () => {
     await retro.setVotesHidden(!board?.votes_hidden);
   };
@@ -107,42 +107,46 @@ const VoteVisibilityToggle = (
   return (
     <button
       type="button"
-      class={`btn btn-ghost btn-sm tooltip tooltip-bottom ${showVotes ? 'text-blue-500' : 'text-gray-500'}`}
+      class={`btn btn-ghost btn-sm tooltip tooltip-bottom ${
+        showVotes ? "text-blue-500" : "text-gray-500"
+      }`}
       data-tip={showVotes ? "Hide Votes" : "Show Votes"}
       aria-label={showVotes ? "Hide Votes" : "Show Votes"}
       onClick={toggleVotes}
     >
-      {showVotes ? (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-          class="w-5 h-5"
-        >
-          <title>Eye Open</title>
-          <path d="M10 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" />
-          <path
-            fill-rule="evenodd"
-            d="M.664 10.59a1.651 1.651 0 0 1 0-1.186A10.004 10.004 0 0 1 10 3c4.257 0 7.893 2.66 9.336 6.41.147.381.147.804 0 1.186A10.004 10.004 0 0 1 10 17c-4.257 0-7.893-2.66-9.336-6.41ZM14 10a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z"
-            clip-rule="evenodd"
-          />
-        </svg>
-      ) : (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-          class="w-5 h-5"
-        >
-          <title>Eye Closed</title>
-          <path
-            fill-rule="evenodd"
-            d="M3.28 2.22a.75.75 0 0 0-1.06 1.06l14.5 14.5a.75.75 0 1 0 1.06-1.06l-1.745-1.745a10.029 10.029 0 0 0 3.3-4.38 1.651 1.651 0 0 0 0-1.185A10.004 10.004 0 0 0 9.999 3a9.956 9.956 0 0 0-4.744 1.194L3.28 2.22ZM7.752 6.69l1.092 1.092a2.5 2.5 0 0 1 3.374 3.373l1.091 1.092a4 4 0 0 0-5.557-5.557Z"
-            clip-rule="evenodd"
-          />
-          <path d="m10.748 13.93 2.523 2.523a9.987 9.987 0 0 1-3.27.547c-4.258 0-7.894-2.66-9.337-6.41a1.651 1.651 0 0 1 0-1.186A10.007 10.007 0 0 1 2.839 6.02L6.07 9.252a4 4 0 0 0 4.678 4.678Z" />
-        </svg>
-      )}
+      {showVotes
+        ? (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            class="w-5 h-5"
+          >
+            <title>Eye Open</title>
+            <path d="M10 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" />
+            <path
+              fill-rule="evenodd"
+              d="M.664 10.59a1.651 1.651 0 0 1 0-1.186A10.004 10.004 0 0 1 10 3c4.257 0 7.893 2.66 9.336 6.41.147.381.147.804 0 1.186A10.004 10.004 0 0 1 10 17c-4.257 0-7.893-2.66-9.336-6.41ZM14 10a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        )
+        : (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            class="w-5 h-5"
+          >
+            <title>Eye Closed</title>
+            <path
+              fill-rule="evenodd"
+              d="M3.28 2.22a.75.75 0 0 0-1.06 1.06l14.5 14.5a.75.75 0 1 0 1.06-1.06l-1.745-1.745a10.029 10.029 0 0 0 3.3-4.38 1.651 1.651 0 0 0 0-1.185A10.004 10.004 0 0 0 9.999 3a9.956 9.956 0 0 0-4.744 1.194L3.28 2.22ZM7.752 6.69l1.092 1.092a2.5 2.5 0 0 1 3.374 3.373l1.091 1.092a4 4 0 0 0-5.557-5.557Z"
+              clip-rule="evenodd"
+            />
+            <path d="m10.748 13.93 2.523 2.523a9.987 9.987 0 0 1-3.27.547c-4.258 0-7.894-2.66-9.337-6.41a1.651 1.651 0 0 1 0-1.186A10.007 10.007 0 0 1 2.839 6.02L6.07 9.252a4 4 0 0 0 4.678 4.678Z" />
+          </svg>
+        )}
     </button>
   );
 };
@@ -154,10 +158,14 @@ const SortOptions = (
   },
 ) => {
   const showVotes = !board?.votes_hidden;
-  
+
   return (
     <div class="dropdown">
-      <div tabIndex={0} role="button" class={`btn btn-ghost btn-sm ${!showVotes ? 'btn-disabled' : ''}`}>
+      <div
+        tabIndex={0}
+        role="button"
+        class={`btn btn-ghost btn-sm ${!showVotes ? "btn-disabled" : ""}`}
+      >
         Sort by: {sortByVotes ? "Votes" : "Time"}
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -317,7 +325,11 @@ const NavToolbar = ({
         )
         : <SearchButton setShowSearch={setShowSearch} />}
       <VoteVisibilityToggle board={board} retro={retro} />
-      <SortOptions sortByVotes={sortByVotes} setSortByVotes={setSortByVotes} board={board} />
+      <SortOptions
+        sortByVotes={sortByVotes}
+        setSortByVotes={setSortByVotes}
+        board={board}
+      />
       <ShareButton onShare={onShare} />
       <ExportButton id={id} />
       <DeleteButton confirmDelete={confirmDelete} />

@@ -208,4 +208,29 @@ describe("create and use a retro", () => {
     console.log("leader URL:", loggedInBoardUrl);
     await expect(follower.getByPlaceholder("I'm glad that...")).toBeVisible();
   }, 20_000);
+
+  test("should show user's own vote as '1' when votes are hidden", async () => {
+    await leader.goto(`http://localhost:${PORT}`);
+
+    const link = leader.getByRole("button", { name: /Start your retro/ });
+    await expect(link).toBeVisible();
+    await link.click();
+    await expect(leader.getByPlaceholder("I'm glad that...")).toBeVisible();
+
+    await follower.goto(leader.url());
+
+    await addItem("Local storage vote test");
+
+    await leader.getByRole("button", { name: /Hide Votes/ }).click();
+    await leader.getByLabel("Like").click();
+    await expect(leader.getByLabel("Like")).toContainText("1");
+    await expect(follower.getByLabel("Like")).toContainText("?");
+
+    await follower.getByLabel("Like").click();
+    await expect(leader.getByLabel("Like")).toContainText("1");
+    await expect(follower.getByLabel("Like")).toContainText("1");
+
+    await leader.getByRole("button", { name: /Show Votes/ }).click();
+    await expect(leader.getByLabel("Like")).toContainText("2");
+  }, 10_000);
 });

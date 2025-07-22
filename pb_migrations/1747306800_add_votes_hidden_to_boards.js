@@ -3,15 +3,18 @@ migrate((app) => {
   const collection = app.findCollectionByNameOrId("dv9dz4t5add38hy");
 
   // add
-  collection.fields.addAt(2, new Field({
-    "hidden": false,
-    "id": "votes_hidden",
-    "name": "votes_hidden",
-    "presentable": false,
-    "required": false,
-    "system": false,
-    "type": "bool"
-  }));
+  collection.fields.addAt(
+    2,
+    new Field({
+      "hidden": false,
+      "id": "votes_hidden",
+      "name": "votes_hidden",
+      "presentable": false,
+      "required": false,
+      "system": false,
+      "type": "bool",
+    }),
+  );
 
   return app.save(collection);
 }, (app) => {

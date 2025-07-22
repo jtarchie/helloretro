@@ -11,7 +11,25 @@ function ViewItem(
   },
 ) {
   const retro = useRetro();
-  const upvote = async () => await retro?.vote(item.id, 1);
+  // Get board id from item (assuming item.board or similar)
+  const boardId = item.board || item.boardId || item.board_id;
+  // Local storage key per board
+  const votesKey = boardId ? `retro-votes-${boardId}` : null;
+  // Get voted items for this board
+  const votedItems = votesKey
+    ? JSON.parse(localStorage.getItem(votesKey) || "[]")
+    : [];
+  // Has user voted for this item?
+  const hasVoted = votedItems.includes(item.id);
+
+  const upvote = async () => {
+    await retro?.vote(item.id, 1);
+    // Save vote to local storage
+    if (votesKey && !hasVoted) {
+      const updated = [...votedItems, item.id];
+      localStorage.setItem(votesKey, JSON.stringify(updated));
+    }
+  };
   const setActive = async () => {
     await retro?.setActiveItem(item.id);
     setState("active");
@@ -77,7 +95,7 @@ function ViewItem(
             </svg>
           </span>
           <span class="text-red-500 mr-2">
-            {showVotes ? item.votes : "?"}
+            {showVotes ? item.votes : hasVoted ? "1" : "?"}
           </span>
         </button>
 

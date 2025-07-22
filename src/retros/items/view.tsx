@@ -23,9 +23,10 @@ function ViewItem(
   const hasVoted = votedItems.includes(item.id);
 
   const upvote = async () => {
+    if (hasVoted) return; // Prevent double voting
     await retro?.vote(item.id, 1);
     // Save vote to local storage
-    if (votesKey && !hasVoted) {
+    if (votesKey) {
       const updated = [...votedItems, item.id];
       localStorage.setItem(votesKey, JSON.stringify(updated));
     }
@@ -81,7 +82,7 @@ function ViewItem(
           }`}
           onClick={upvote}
           aria-label="Like"
-          disabled={item.completed}
+          disabled={item.completed || hasVoted} // Disable if already voted
         >
           <span class="text-red-500 mr-2">
             <svg

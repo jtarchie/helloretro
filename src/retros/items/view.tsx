@@ -2,6 +2,7 @@ import { useRetro } from "../../retro";
 import type { RecordModel } from "pocketbase";
 import { SimpleFormat } from "../../simple_format";
 import type { ItemStatus } from "./status";
+import { useSignal } from "@preact/signals";
 
 function ViewItem(
   { item, setState, showVotes }: {
@@ -11,25 +12,22 @@ function ViewItem(
   },
 ) {
   const retro = useRetro();
-  // Get board id from item (assuming item.board or similar)
   const boardId = item.board || item.boardId || item.board_id;
-  // Local storage key per board
   const votesKey = boardId ? `retro-votes-${boardId}` : null;
-  // Get voted items for this board
   const votedItems = votesKey
     ? JSON.parse(localStorage.getItem(votesKey) || "[]")
     : [];
-  // Has user voted for this item?
-  const hasVoted = votedItems.includes(item.id);
+  // Use a signal for local voted state
+  const hasVotedSignal = useSignal(votedItems.includes(item.id));
 
   const upvote = async () => {
-    if (hasVoted) return; // Prevent double voting
-    await retro?.vote(item.id, 1);
-    // Save vote to local storage
+    if (hasVotedSignal.value) return;
+    hasVotedSignal.value = true; // Update local state immediately
     if (votesKey) {
       const updated = [...votedItems, item.id];
       localStorage.setItem(votesKey, JSON.stringify(updated));
     }
+    await retro?.vote(item.id, 1);
   };
   const setActive = async () => {
     await retro?.setActiveItem(item.id);
@@ -82,7 +80,7 @@ function ViewItem(
           }`}
           onClick={upvote}
           aria-label="Like"
-          disabled={item.completed || hasVoted} // Disable if already voted
+          disabled={item.completed || hasVotedSignal.value} // Disable if already voted
         >
           <span class="text-red-500 mr-2">
             <svg
@@ -96,7 +94,7 @@ function ViewItem(
             </svg>
           </span>
           <span class="text-red-500 mr-2">
-            {showVotes ? item.votes : hasVoted ? "1" : "?"}
+            {showVotes ? item.votes : hasVotedSignal.value ? "1" : "?"}
           </span>
         </button>
 

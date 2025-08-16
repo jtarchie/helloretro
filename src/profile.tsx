@@ -4,21 +4,18 @@ import { pb, useAuth } from "./services/auth";
 import { useLocation } from "preact-iso";
 import { RecordModel } from "pocketbase";
 
-// type Board = {
-//   id: string;
-//   created: string;
-//   updated: string;
-// }
-
 function Profile({}: { path?: string }) {
   const auth = useAuth();
   const location = useLocation();
   const [boards, setBoards] = useState<RecordModel[]>([]);
+  const [countsMap, setCountsMap] = useState<
+    Record<string, Record<string, number>>
+  >({});
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    // Redirect to login page if not logged in
+    // If user is not logged in, redirect to login. Do not attempt to fetch until auth state is available.
     if (!auth.isLoggedIn || !auth.user) {
       location.route("/login", true);
       return;
@@ -37,6 +34,36 @@ function Profile({}: { path?: string }) {
         });
 
         setBoards(boardRecords.items);
+
+        // Fetch item counts per panel for each board
+        const newCounts: Record<string, Record<string, number>> = {};
+        for (const b of boardRecords.items) {
+          try {
+            const items = await pb.collection("items").getFullList({
+              filter: `board_id = "${b.id}"`,
+            });
+
+            const counts: Record<string, number> = {
+              happy: 0,
+              meh: 0,
+              sad: 0,
+              "action items": 0,
+            };
+
+            items.forEach((it: RecordModel) => {
+              const cat = (it.category || "").toString();
+              counts[cat] = (counts[cat] || 0) + 1;
+            });
+
+            newCounts[b.id] = counts;
+          } catch (err) {
+            console.error("Error fetching items for board", b.id, err);
+            newCounts[b.id] = { happy: 0, meh: 0, sad: 0, "action items": 0 };
+          }
+        }
+
+        console.log("Fetched counts for boards:", newCounts);
+        setCountsMap(newCounts);
       } catch (error) {
         console.error("Error fetching boards:", error);
         setError("Failed to load your retrospectives. Please try again later.");
@@ -46,7 +73,7 @@ function Profile({}: { path?: string }) {
     };
 
     fetchBoards();
-  }, [auth.isLoggedIn, auth.user]);
+  }, []);
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -133,12 +160,46 @@ function Profile({}: { path?: string }) {
                     <td>{formatDate(board.created)}</td>
                     <td>{formatDate(board.updated)}</td>
                     <td>
-                      <a
-                        href={`/retros/${board.id}`}
-                        class="btn btn-sm btn-primary mr-2"
-                      >
-                        View
-                      </a>
+                      <div class="flex items-center gap-2">
+                        <div class="text-sm">
+                          <div>😃 {countsMap[board.id]?.happy ?? 0}</div>
+                          <div>🤨 {countsMap[board.id]?.meh ?? 0}</div>
+                          <div>😢 {countsMap[board.id]?.sad ?? 0}</div>
+                          <div>
+                            📝 {countsMap[board.id]?.["action items"] ?? 0}
+                          </div>
+                        </div>
+                        <div>
+                          <a
+                            href={`/retros/${board.id}`}
+                            class="btn btn-sm btn-primary mr-2"
+                          >
+                            View
+                          </a>
+                          <button
+                            type="button"
+                            class="btn btn-sm btn-ghost"
+                            onClick={async () => {
+                              if (
+                                !globalThis.confirm("Delete this retro?")
+                              ) return;
+                              try {
+                                await pb.collection("boards").delete(board.id);
+                                setBoards((prev) =>
+                                  prev.filter((b) => b.id !== board.id)
+                                );
+                              } catch (err) {
+                                console.error("Failed to delete board", err);
+                                setError(
+                                  "Failed to delete retro. Try again later.",
+                                );
+                              }
+                            }}
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </div>
                     </td>
                   </tr>
                 ))}

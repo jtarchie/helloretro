@@ -69,25 +69,52 @@ class Retro {
     const [items, setItems] = useState<RecordModel[]>([]);
 
     // subscribe to the latest items
-    useEffect(
-      (async () => {
-        const unsubscribeConnect = await this.client.realtime.subscribe(
-          "PB_CONNECT",
-          () => {
-            this.client.collection("items").getFullList({
-              sort: "created",
-              filter: this.client.filter(
-                "board_id={:board_id} && category={:category}",
-                { board_id: this.id, category: category },
-              ),
-            }).then((results) => {
-              setItems(results);
-            });
-          },
-        );
+    useEffect(() => {
+      let mounted = true;
+      const boardId = this.id;
 
-        const unsubscribeItems = await this.client.collection("items")
-          .subscribe(
+      let unsubscribeConnect: (() => Promise<void>) | undefined;
+      let unsubscribeItems: (() => Promise<void>) | undefined;
+
+      const setup = async () => {
+        try {
+          // Initial load immediately so UI doesn't wait on realtime connect
+          const results = await this.client.collection("items").getFullList({
+            sort: "created",
+            filter: this.client.filter(
+              "board_id={:board_id} && category={:category}",
+              { board_id: boardId, category: category },
+            ),
+          });
+          if (!mounted) return;
+          setItems(results);
+        } catch (err) {
+          // ignore initial load errors
+          console.error("error loading items:", err);
+        }
+
+        try {
+          unsubscribeConnect = await this.client.realtime.subscribe(
+            "PB_CONNECT",
+            async () => {
+              try {
+                const results = await this.client.collection("items")
+                  .getFullList({
+                    sort: "created",
+                    filter: this.client.filter(
+                      "board_id={:board_id} && category={:category}",
+                      { board_id: boardId, category: category },
+                    ),
+                  });
+                if (!mounted) return;
+                setItems(results);
+              } catch (err) {
+                console.error("error on PB_CONNECT load:", err);
+              }
+            },
+          );
+
+          unsubscribeItems = await this.client.collection("items").subscribe(
             "*",
             (event) => {
               if (event.action === "create") {
@@ -107,18 +134,23 @@ class Retro {
             {
               filter: this.client.filter(
                 "board_id={:board_id} && category={:category}",
-                { board_id: this.id, category: category },
+                { board_id: boardId, category: category },
               ),
             },
           );
+        } catch (err) {
+          console.error("error setting up realtime subscriptions:", err);
+        }
+      };
 
-        return () => {
-          unsubscribeItems();
-          unsubscribeConnect();
-        };
-      }) as () => void,
-      [],
-    );
+      setup();
+
+      return () => {
+        mounted = false;
+        if (unsubscribeItems) unsubscribeItems().catch(() => {});
+        if (unsubscribeConnect) unsubscribeConnect().catch(() => {});
+      };
+    }, [category]);
 
     return items;
   }

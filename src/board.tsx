@@ -6,6 +6,7 @@ import { Tab } from "./retros/tab";
 import MediaQuery from "react-responsive";
 import { useEffect, useState } from "preact/hooks";
 import type { RecordModel } from "pocketbase";
+import { useAuth } from "./services/auth";
 
 // Component for the search functionality
 const SearchInput = ({
@@ -259,7 +260,22 @@ const ExportButton = ({ id }: { id: string }) => {
 };
 
 // Component for the delete button
-const DeleteButton = ({ confirmDelete }: { confirmDelete: () => void }) => {
+const DeleteButton = (
+  { confirmDelete, board }: {
+    confirmDelete: () => void;
+    board: RecordModel | null;
+  },
+) => {
+  // Show the delete control only to the creator (created_by)
+  const auth = useAuth();
+
+  // `created_by` is stored as the user id string in PocketBase
+  const canDelete = Boolean(
+    board && auth.user && board.created_by === auth.user.id,
+  );
+
+  if (!canDelete) return null;
+
   return (
     <button
       type="button"
@@ -332,7 +348,7 @@ const NavToolbar = ({
       />
       <ShareButton onShare={onShare} />
       <ExportButton id={id} />
-      <DeleteButton confirmDelete={confirmDelete} />
+      <DeleteButton confirmDelete={confirmDelete} board={board} />
     </Nav>
   );
 };

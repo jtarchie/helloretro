@@ -125,8 +125,16 @@ describe("create and use a retro", () => {
     await leader.getByLabel("Start Discussing").click();
     await expect(leader.locator("#app")).toContainText(/00:\d\d/);
     await expect(follower.locator("#app")).toContainText(/00:\d\d/);
+    await leader.getByLabel("Stop").click();
 
+    await expect(leader.locator("#app")).not.toContainText(/00:\d\d/);
+    await expect(follower.locator("#app")).not.toContainText(/00:\d\d/);
+
+    await leader.getByLabel("Start Discussing").click();
     await leader.getByLabel("Complete").click();
+    await expect(leader.locator("#app")).not.toContainText(/00:\d\d/);
+    await expect(follower.locator("#app")).not.toContainText(/00:\d\d/);
+
     markdownText = await getMarkdown();
     expect(markdownText).toContain(
       `- [x] Start this item.`,

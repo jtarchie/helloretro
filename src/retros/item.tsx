@@ -11,7 +11,7 @@ function Item({ item, showVotes }: { item: RecordModel; showVotes: boolean }) {
   useEffect(() => {
     if (!item.completed && item.active != "") {
       setState("active");
-    } else if (item.completed) {
+    } else {
       setState("view");
     }
   }, [item, item.completed, item.active]);

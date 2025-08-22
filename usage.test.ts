@@ -217,42 +217,66 @@ describe("create and use a retro", () => {
     await expect(follower.getByPlaceholder("I'm glad that...")).toBeVisible();
   }, 20_000);
 
-  test("should show user's own vote as '1' when votes are hidden", async () => {
-    await leader.goto(`http://localhost:${PORT}`);
-    const link = leader.getByRole("button", { name: /Start your retro/ });
-    await expect(link).toBeVisible();
-    await link.click();
-    await expect(leader.getByPlaceholder("I'm glad that...")).toBeVisible();
-    await follower.goto(leader.url());
+  test(
+    "should show user's own vote as '1' when votes are hidden",
+    async () => {
+      await leader.goto(`http://localhost:${PORT}`);
+      const link = leader.getByRole("button", { name: /Start your retro/ });
+      await expect(link).toBeVisible();
+      await link.click();
+      await expect(leader.getByPlaceholder("I'm glad that...")).toBeVisible();
+      await follower.goto(leader.url());
 
-    await addItem("Local storage vote test");
+      await addItem("Local storage vote test");
 
-    await leader.getByRole("button", { name: /Hide Votes/ }).click();
+      await leader.getByRole("button", { name: /Hide Votes/ }).click();
 
-    await leader.getByLabel("Like").click();
-    await expect(leader.getByLabel("Like")).toContainText("1");
-    await expect(await leader.getByLabel("Like").isDisabled()).toBe(false);
-    await expect(leader.getByLabel("Like")).toContainText("1");
-    await expect(follower.getByLabel("Like")).toContainText("?");
+      await leader.getByLabel("Like").click();
+      await expect(leader.getByLabel("Like")).toContainText("1");
+      await expect(await leader.getByLabel("Like").isDisabled()).toBe(false);
+      await expect(leader.getByLabel("Like")).toContainText("1");
+      await expect(follower.getByLabel("Like")).toContainText("?");
 
-    await follower.getByLabel("Like").click();
-    await expect(leader.getByLabel("Like")).toContainText("1");
-    await expect(follower.getByLabel("Like")).toContainText("1");
-    await expect(await follower.getByLabel("Like").isDisabled()).toBe(false);
-    await expect(follower.getByLabel("Like")).toContainText("1");
+      await follower.getByLabel("Like").click();
+      await expect(leader.getByLabel("Like")).toContainText("1");
+      await expect(follower.getByLabel("Like")).toContainText("1");
+      await expect(await follower.getByLabel("Like").isDisabled()).toBe(false);
+      await expect(follower.getByLabel("Like")).toContainText("1");
 
-    // Test toggle vote functionality - leader removes their vote
-    await leader.getByLabel("Remove Like").click();
-    await expect(leader.getByLabel("Like")).toContainText("?");
-    await expect(follower.getByLabel("Like")).toContainText("1");
+      // Test toggle vote functionality - leader removes their vote
+      await leader.getByLabel("Remove Like").click();
+      await expect(leader.getByLabel("Like")).toContainText("?");
+      await expect(follower.getByLabel("Like")).toContainText("1");
 
-    // Test toggle vote functionality - follower removes their vote
-    await follower.getByLabel("Remove Like").click();
-    await expect(leader.getByLabel("Like")).toContainText("?");
-    await expect(follower.getByLabel("Like")).toContainText("?");
+      // Test toggle vote functionality - follower removes their vote
+      await follower.getByLabel("Remove Like").click();
+      await expect(leader.getByLabel("Like")).toContainText("?");
+      await expect(follower.getByLabel("Like")).toContainText("?");
 
-    await leader.getByRole("button", { name: /Show Votes/ }).click();
-    await expect(leader.getByLabel("Like")).toContainText("0");
-    await expect(follower.getByLabel("Like")).toContainText("0");
-  }, 10_000);
+      await leader.getByRole("button", { name: /Show Votes/ }).click();
+      await expect(leader.getByLabel("Like")).toContainText("0");
+      await expect(follower.getByLabel("Like")).toContainText("0");
+
+      await leader.getByLabel("Like").click();
+      await expect(leader.getByLabel("Like")).toContainText("1");
+      await expect(follower.getByLabel("Like")).toContainText("1");
+
+      await follower.getByLabel("Like").click();
+      await expect(follower.getByLabel("Like")).toContainText("2");
+      await expect(leader.getByLabel("Like")).toContainText("2");
+
+      await leader.getByLabel("Remove Like").click();
+      await expect(leader.getByLabel("Like")).toContainText("1");
+      await expect(follower.getByLabel("Like")).toContainText("1");
+
+      await follower.reload();
+      await expect(leader.getByLabel("Like")).toContainText("1");
+      await expect(follower.getByLabel("Like")).toContainText("1");
+
+      await follower.getByLabel("Remove Like").click();
+      await expect(leader.getByLabel("Like")).toContainText("0");
+      await expect(follower.getByLabel("Like")).toContainText("0");
+    },
+    10_000,
+  );
 });

@@ -20,14 +20,24 @@ function ViewItem(
   // Use a signal for local voted state
   const hasVotedSignal = useSignal(votedItems.includes(item.id));
 
-  const upvote = async () => {
-    if (hasVotedSignal.value) return;
-    hasVotedSignal.value = true; // Update local state immediately
-    if (votesKey) {
-      const updated = [...votedItems, item.id];
-      localStorage.setItem(votesKey, JSON.stringify(updated));
+  const toggleVote = async () => {
+    if (hasVotedSignal.value) {
+      // Remove vote
+      hasVotedSignal.value = false;
+      if (votesKey) {
+        const updated = votedItems.filter((id: string) => id !== item.id);
+        localStorage.setItem(votesKey, JSON.stringify(updated));
+      }
+      await retro?.vote(item.id, -1);
+    } else {
+      // Add vote
+      hasVotedSignal.value = true;
+      if (votesKey) {
+        const updated = [...votedItems, item.id];
+        localStorage.setItem(votesKey, JSON.stringify(updated));
+      }
+      await retro?.vote(item.id, 1);
     }
-    await retro?.vote(item.id, 1);
   };
   const setActive = async () => {
     await retro?.setActiveItem(item.id);
@@ -78,15 +88,17 @@ function ViewItem(
           class={`flex flex-col items-center ${
             item.completed && "btn-disabled"
           }`}
-          onClick={upvote}
-          aria-label="Like"
-          disabled={item.completed || hasVotedSignal.value} // Disable if already voted
+          onClick={toggleVote}
+          aria-label={hasVotedSignal.value ? "Remove Like" : "Like"}
+          disabled={item.completed}
         >
           <span class="text-red-500 mr-2">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 20 20"
-              fill="currentColor"
+              fill={hasVotedSignal.value ? "currentColor" : "none"}
+              stroke={hasVotedSignal.value ? "none" : "currentColor"}
+              stroke-width={hasVotedSignal.value ? "0" : "1.5"}
               class="w-5 h-5"
               aria-hidden="true"
             >
@@ -96,8 +108,7 @@ function ViewItem(
           <span class="text-red-500 mr-2">
             {showVotes ? item.votes : hasVotedSignal.value ? "1" : "?"}
           </span>
-        </button>
-
+        </button>{" "}
         <SimpleFormat classes="text-black" text={item.description} />
       </div>
       <button

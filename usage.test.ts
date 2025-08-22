@@ -231,18 +231,28 @@ describe("create and use a retro", () => {
 
     await leader.getByLabel("Like").click();
     await expect(leader.getByLabel("Like")).toContainText("1");
-    await expect(await leader.getByLabel("Like").isDisabled()).toBe(true);
+    await expect(await leader.getByLabel("Like").isDisabled()).toBe(false);
     await expect(leader.getByLabel("Like")).toContainText("1");
     await expect(follower.getByLabel("Like")).toContainText("?");
 
     await follower.getByLabel("Like").click();
     await expect(leader.getByLabel("Like")).toContainText("1");
     await expect(follower.getByLabel("Like")).toContainText("1");
-    await expect(await follower.getByLabel("Like").isDisabled()).toBe(true);
+    await expect(await follower.getByLabel("Like").isDisabled()).toBe(false);
     await expect(follower.getByLabel("Like")).toContainText("1");
 
+    // Test toggle vote functionality - leader removes their vote
+    await leader.getByLabel("Remove Like").click();
+    await expect(leader.getByLabel("Like")).toContainText("?");
+    await expect(follower.getByLabel("Like")).toContainText("1");
+
+    // Test toggle vote functionality - follower removes their vote
+    await follower.getByLabel("Remove Like").click();
+    await expect(leader.getByLabel("Like")).toContainText("?");
+    await expect(follower.getByLabel("Like")).toContainText("?");
+
     await leader.getByRole("button", { name: /Show Votes/ }).click();
-    await expect(leader.getByLabel("Like")).toContainText("2");
-    await expect(follower.getByLabel("Like")).toContainText("2");
+    await expect(leader.getByLabel("Like")).toContainText("0");
+    await expect(follower.getByLabel("Like")).toContainText("0");
   }, 10_000);
 });

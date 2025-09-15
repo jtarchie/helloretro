@@ -10,14 +10,14 @@ primary_region = 'sjc'
 dockerfile = "Dockerfile"
 
 [build.args]
-PB_VERSION = "0.29.2"
+PB_VERSION = "0.30.0"
 
 [http_service]
 internal_port = 8080
 force_https = true
 auto_stop_machines = 'suspend'
 auto_start_machines = true
-min_machines_running = 0
+min_machines_running = 1
 protocol = "tcp"
 processes = ['app']
 

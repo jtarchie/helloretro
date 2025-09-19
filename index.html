@@ -83,8 +83,59 @@
     <meta name="theme-color" content="#ffffff" />
   </head>
 
-  <body class="flex flex-col h-screen">
-    <div id="app" class="flex flex-col h-full"></div>
+  <body class="antialiased bg-base-100 text-base-content">
+    <div id="app">
+      <section
+        class="hero min-h-screen bg-gradient-to-r from-primary/90 via-secondary/80 to-accent/70 text-primary-content">
+        <div class="hero-content text-center">
+          <div class="max-w-2xl">
+            <img src="/logo.png" alt="HelloRetro"
+              class="mx-auto w-28 h-28 mask-squircle shadow-lg mb-6 bg-base-200" />
+            <h1
+              class="text-5xl sm:text-6xl font-extrabold leading-tight">HelloRetro
+              has been sunsetted</h1>
+            <p class="mt-4 text-lg sm:text-xl text-base-content/90">We’ve
+              officially retired HelloRetro. The service is no longer
+              maintained and we recommend migrating to an alternative
+              retrospectives tool for continued reliability and
+              security.</p>
+            <p
+              class="mt-3 text-lg sm:text-xl font-semibold text-base-content/95">Please
+              use something else.</p>
+
+            <div
+              class="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3">
+              <a class="btn btn-lg btn-neutral"
+                href="https://github.com/topics/retrospective"
+                target="_blank" rel="noopener">Explore alternatives</a>
+              <a class="btn btn-lg btn-outline"
+                href="mailto:oh@helloretro.app" target="_blank"
+                rel="noopener">Contact support</a>
+            </div>
+
+            <div class="mt-6 text-sm text-base-content/70">
+              <p>Thank you for being part of the HelloRetro community — your
+                feedback and contributions were deeply appreciated.</p>
+              <p class="mt-2">If you run a self-hosted instance, please
+                refer to your repository or deployment docs for migration
+                and shutdown guidance.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer
+        class="footer footer-center p-6 bg-base-200 text-base-content/80">
+        <div>
+          <p>© <span id="year"></span> HelloRetro — retired</p>
+        </div>
+      </footer>
+    </div>
+
+    <script>
+      // Small script to set current year and enhance accessibility
+      try { document.getElementById('year').textContent = new Date().getFullYear(); } catch(e){}
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
